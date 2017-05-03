@@ -32,10 +32,9 @@ class Nao():
     def parse_message(self, message):
         print (message)
 
-    def run_behavior(self, behavior):
-        # run a behavior installed on nao
-        # for example: "movements/introduction_all_0"
-
+    def run_behavior(self, parameters):
+        ''' run a behavior installed on nao. parameters is a behavior. For example "movements/introduction_all_0" '''
+        behavior = str(parameters[0])
         self.managerProxy.post.runBehavior(behavior)
 
     def print_installed_behaviors(self):
@@ -45,9 +44,12 @@ class Nao():
         print "Behaviors on the robot:"
         print names
 
-    def say_text_to_speech (self, text):
+    def say_text_to_speech (self, parameters):
         # make nao say the string text
-        self.tts.say (text)
+        # parameters in the form of ['say something','say something','say something']
+        for text in parameters:
+            print("say_text_to_speech", text)
+            self.tts.say (str(text))
 
     def play_audio_file (self, file):
         # Play audio file on nao.
