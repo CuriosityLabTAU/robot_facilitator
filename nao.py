@@ -27,7 +27,7 @@ class Nao():
     def start_nao(self):
         self.robotConfig = self.motionProxy.getRobotConfig()  # Get the Robot Configuration
         self.motionProxy.rest()
-        self.motionProxy.setStiffnesses("Body", 1.0)
+        #self.motionProxy.setStiffnesses("Body", 1.0)
 
     def parse_message(self, message):
         # message is json string in the form of:  {'action': 'run_behavior', 'parameters': ["movements/introduction_all_0",...]}
@@ -36,10 +36,11 @@ class Nao():
         message_dict = json.loads(message)
         action = message_dict['action']
         parameters = message_dict['parameters']
+        print("action=",action)
         if (action == 'say_text_to_speech'):
-            print("say_text_to_speech")
+            print('say_text_to_speech')
             self.say_text_to_speech(parameters)
-        if (action == "run_behavior"):
+        if (action == 'run_behavior'):
             print(help(self.run_behavior))
             self.print_installed_behaviors()
             self.run_behavior(parameters)
