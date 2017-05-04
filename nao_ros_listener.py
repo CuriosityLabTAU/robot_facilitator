@@ -4,15 +4,11 @@ from std_msgs.msg import String
 from nao import Nao
 
 
-class NaoNode():
+class NaoListenerNode():
     def __init__(self):
-       self.nao = Nao()
-       self.publisher = rospy.Publisher('nao_state', String, queue_size=10)
-
-    def start(self):
-        print("start")
-        #init a listener:
-        rospy.init_node('nao_listener')
+        self.nao = Nao()
+        self.publisher = rospy.Publisher('nao_state', String, queue_size=10)
+        rospy.init_node('nao_listener') #init a listener:
         rospy.Subscriber('nao_commands', String, self.callback_nao)
         rospy.spin() #spin() simply keeps python from exiting until this node is stopped
 
@@ -21,10 +17,11 @@ class NaoNode():
         message = data.data
         rospy.loginfo(message)
 
-
     def publish_angeles(self):
         rospy.init_node('nao_angeles')
 
-
-nao = NaoNode()
-nao.start()
+if __name__ == '__main__':
+    try:
+        nao = NaoListenerNode()
+    except rospy.ROSInterruptException:
+        pass
