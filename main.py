@@ -27,8 +27,8 @@ time.sleep(0.5)
 # task_dic =  {'size': '5 5', 'pieces': [('square', '90', '1 1'), ('small triangle2', '180', '0 1')]}
 # json_str = json.dumps(task_dic)
 
-nao_message = {'action':'say_text_to_speech', 'parameters': ["How are you","what do you say?"]}
-# nao_message = {'action':'run_behavior', 'parameters': ["movements/introduction_all_0"]}
-
+#nao_message = {'action':'say_text_to_speech', 'parameters': ["How are you Orpaz? Happy Birthday!"]}
+#nao_message = {'action':'run_behavior', 'parameters': ["movements/introduction_all_0"]}
+nao_message = {'action' :'play_audio_file', 'parameters': ["/home/nao/wav/ask_again_0.wav"]}
 nao_message_str = str(json.dumps(nao_message))
 ts.send_message(nao_message_str)

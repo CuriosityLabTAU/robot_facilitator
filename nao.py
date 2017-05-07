@@ -27,28 +27,37 @@ class Nao():
     def start_nao(self):
         self.robotConfig = self.motionProxy.getRobotConfig()  # Get the Robot Configuration
         self.motionProxy.rest()
-        #self.motionProxy.setStiffnesses("Body", 1.0)
+        self.motionProxy.setStiffnesses("Body", 1.0)
 
     def parse_message(self, message):
         # message is json string in the form of:  {'action': 'run_behavior', 'parameters': ["movements/introduction_all_0",...]}
-
+        # eval the action and run with parameters
+        print("parse_message")
         print (message)
         message_dict = json.loads(message)
-        action = message_dict['action']
+        action = str(message_dict['action'])
         parameters = message_dict['parameters']
-        print("action=",action)
-        if (action == 'say_text_to_speech'):
-            print('say_text_to_speech')
-            self.say_text_to_speech(parameters)
-        if (action == 'run_behavior'):
-            print(help(self.run_behavior))
-            self.print_installed_behaviors()
-            self.run_behavior(parameters)
+        print(str("self."+action+"("+str(parameters)+")"))
+        eval(str("self."+action+"("+str(parameters)+")"))
+
+        #print("action=",action)
+        #if (action == 'say_text_to_speech'):
+        #    print('say_text_to_speech')
+        #    self.say_text_to_speech(parameters)
+        #    #self.eval(action)(parameters)
+        #if (action == 'run_behavior'):
+        #    print(help(self.run_behavior))
+        #    self.print_installed_behaviors()
+        #    self.run_behavior(parameters)
+        #if (action == 'play_audio_file'):
+        #    #self.play_audio_file(parameters)
+        #    self.eval(action)(parameters)
 
 
     def get_angles(self):
         names = "Body"
         use_sensors = False
+        print("get_angles")
         print "Command angeles:"
         print(str(self.motionProxy.getAngles(names, use_sensors)))
         use_sensors = True
@@ -63,7 +72,6 @@ class Nao():
 
     def print_installed_behaviors(self):
         # print all the behaviors installed on nao
-
         names = self.managerProxy.getInstalledBehaviors()
         print "Behaviors on the robot:"
         print names
@@ -75,10 +83,12 @@ class Nao():
             print("say_text_to_speech", text)
             self.tts.say (str(text))
 
-    def play_audio_file (self, file):
+    def play_audio_file (self, parameters):
         # Play audio file on nao.
         # For example: file = '/home/nao/wav/ask_again_0.wav'
-
+        print(parameters)
+        file = str(parameters[0])
+        print(file)
         self.audioProxy.playFile(file, 1.0, 0.0)
 
     def print_installed_sound_sets_list(self):
