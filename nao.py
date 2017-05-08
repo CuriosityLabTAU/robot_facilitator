@@ -3,6 +3,8 @@ from naoqi import ALProxy
 import sys
 import almath
 import json
+import time
+import argparse
 
 
 class Nao():
@@ -18,6 +20,7 @@ class Nao():
             self.postureProxy = ALProxy("ALRobotPosture", self.robotIP, self.port)
             self.trackerProxy = ALProxy("ALTracker", self.robotIP, self.port)
             self.tts = ALProxy("ALTextToSpeech", self.robotIP, self.port)
+
         except Exception,e:
             print "Could not create proxy to ALMotion"
             print "Error was: ",e
@@ -31,9 +34,9 @@ class Nao():
 
     def parse_message(self, message):
         # message is json string in the form of:  {'action': 'run_behavior', 'parameters': ["movements/introduction_all_0",...]}
-        # eval the action and run with parameters ttt
-        print("parse_message")
-        print (message)
+        # eval the action and run with parameters.
+        # For example, eval result could look like: self,say_text_to_speech(['hello','how are you?'])
+        print("parse_message", message)
         message_dict = json.loads(message)
         action = str(message_dict['action'])
         parameters = message_dict['parameters']
@@ -95,6 +98,36 @@ class Nao():
         #print all the sounds installed on nao
         ssl = self.audioProxy.getInstalledSoundSetsList()
         print ssl
+
+    def face_tracker(self, parameters):
+        target_name = "Face"
+        face_width = 0.1
+        #add target to track.
+        self.trackerProxy.registerTarget(target_name, face_width)
+        #The, start tracker
+        self.trackerProxy.track(target_name)
+        print "ALTracker successfully started, now show your face to robot!"
+        print "Use Ctrl+c to stop this script"
+
+        try:
+            while True:
+                time.sleep(1)
+                #print(str(self.trackerProxy.getTargetPosition()))
+        except KeyboardInterrupt:
+            print
+            print "Interrupted by user"
+            print "Stopping"
+
+        #stop tracker
+        self.trackerProxy.stopTracker()
+        self.trackerProxy.unregisterAllTargets()
+        self.motionProxy.rest()
+
+    def get_target_position(self):
+        target_position = self.trackerProxy.getTargetPosition()
+        print(str(target_position))
+        return (str(target_position))
+
 
     def change_pose(self, data_str):
         # data_str = 'name1, name2;target1, target2;pMaxSpeedFraction'
