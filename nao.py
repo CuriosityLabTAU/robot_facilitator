@@ -31,7 +31,7 @@ class Nao():
 
     def parse_message(self, message):
         # message is json string in the form of:  {'action': 'run_behavior', 'parameters': ["movements/introduction_all_0",...]}
-        # eval the action and run with parameters
+        # eval the action and run with parameters ttt
         print("parse_message")
         print (message)
         message_dict = json.loads(message)
