@@ -2,10 +2,22 @@
 
 <ScatterTextWidget>:
     orientation: 'vertical'
-    Image:
-        id: balloon5
-        size: root.size
-        pos: root.pos
-        source: './robotator_app/images/TangramGame_Selection_selected.jpg'
-        opacity: 1
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            id: my_label
+            size: root.width, root.height * 0.2
+            text:"Ebay screenshot"
+            font_size: 20
+
+        Image:
+            id: screenshot
+            size: root.width, root.height * 0.8
+
+            source: 'images/ebay.png'
+            opacity: 1
+            allow_stretch: True
+            keep_ratio: False
+
+
 
