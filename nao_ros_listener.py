@@ -19,8 +19,8 @@ class NaoListenerNode():
         rospy.loginfo(message)
         self.nao.parse_message(message)
 
-    def publish_angeles(self):
-        rospy.init_node('nao_angeles')
+    #def publish_angeles(self):
+    #    rospy.init_node('nao_angeles')
 
 if __name__ == '__main__':
     try:

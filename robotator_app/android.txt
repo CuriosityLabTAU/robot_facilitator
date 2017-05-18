@@ -1,0 +1,3 @@
+title=Robotator
+author=Rinat Rosenberg-Kima
+orientation=landscape
