@@ -1,23 +1,14 @@
-from kivy.app import App
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.textinput import TextInput
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.checkbox import CheckBox
-import random
-
-from twisted_server import TwistedServer
+from fake_twisted_server import FakeTwistedServer
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
 import json
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.textinput import TextInput
-from kivy.uix.boxlayout import BoxLayout
 import random
-import time
+from kivy_communication import *
+import sys
+
 
 class MyScreenManager (ScreenManager):
     the_app = None
-
 
 class Screen1 (Screen):
     the_app = None
@@ -53,25 +44,48 @@ class Screen2 (Screen):
 
 class RobotatorApp(App):  #The name of the class will make it search for learning2.kv
     def build(self):
+        self.the_app = self
         #return ScatterTextWidget ()
-        self.twisted_server = TwistedServer()
+        #self.twisted_server = FakeTwistedServer()
         self.screen_manager = MyScreenManager()
         screen1 = Screen1(self)
         screen2 = Screen2(self)
         self.screen_manager.add_widget(screen1)
         self.screen_manager.add_widget(screen2)
         self.screen_manager.current = 'Screen2'
+        self.init_communication()
+
+
         return self.screen_manager
 
-    def robot_say(self, text):
-        nao_message = {'action':'say_text_to_speech', 'parameters': [text]}
-        nao_message_str = str(json.dumps(nao_message))
-        self.twisted_server.send_message(nao_message_str)
+    def init_communication(self):
+        local_ip = '192.168.1.254'
+        local_ip = '192.168.0.101'
+        try:
+            KC.start(the_parents=[self, self.the_app], the_ip=local_ip)  # 127.0.0.1
+            KL.start(mode=[DataMode.file, DataMode.communication, DataMode.ros], pathname=self.user_data_dir, the_ip=local_ip)
+        except:
+            print ("unexpected error:", sys.exc_info())
 
+    def on_connection(self):
+        KL.log.insert(action=LogAction.data, obj='RobotatorApp', comment='start')
+
+    def robot_say(self, text):
+        print ("robot say", text)
+        try:
+            nao_message = {'nao': {'action':'say_text_to_speech', 'parameters': [text]}}
+            nao_message_str = str(json.dumps(nao_message))
+            print("json.loads=", json.loads(nao_message_str))
+            #self.twisted_server.send_message(nao_message_str)
+            KC.client.send_message(nao_message_str)
+            print("robot say: end of try")
+        except:
+            print ("unexpected error:", sys.exc_info())
     def change_screen(self, screen_name):
         print(screen_name)
         self.screen_manager.current = screen_name
 
 
-if __name__ == "__main__":
-    RobotatorApp().run()
+#if __name__ == "__main__":
+
+RobotatorApp().run()
