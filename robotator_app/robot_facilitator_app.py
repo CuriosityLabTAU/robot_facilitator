@@ -1,4 +1,4 @@
-from fake_twisted_server import FakeTwistedServer
+#from fake_twisted_server import FakeTwistedServer
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
 import json
@@ -55,7 +55,6 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
         self.screen_manager.current = 'Screen2'
         self.init_communication()
 
-
         return self.screen_manager
 
     def init_communication(self):
@@ -86,6 +85,5 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
         self.screen_manager.current = screen_name
 
 
-#if __name__ == "__main__":
-
-RobotatorApp().run()
+if __name__ == "__main__":
+    RobotatorApp().run()
