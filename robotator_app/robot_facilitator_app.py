@@ -59,10 +59,10 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
 
     def init_communication(self):
         local_ip = '192.168.1.254'
-        local_ip = '192.168.0.101'
+        server_ip = '192.168.0.105'
         try:
-            KC.start(the_parents=[self, self.the_app], the_ip=local_ip)  # 127.0.0.1
-            KL.start(mode=[DataMode.file, DataMode.communication, DataMode.ros], pathname=self.user_data_dir, the_ip=local_ip)
+            KC.start(the_parents=[self, self.the_app], the_ip=server_ip)  # 127.0.0.1
+            KL.start(mode=[DataMode.file, DataMode.communication, DataMode.ros], pathname=self.user_data_dir, the_ip=server_ip)
         except:
             print ("unexpected error:", sys.exc_info())
 
@@ -80,10 +80,13 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
             print("robot say: end of try")
         except:
             print ("unexpected error:", sys.exc_info())
+
     def change_screen(self, screen_name):
         print(screen_name)
         self.screen_manager.current = screen_name
 
-
+    def data_received(self, data):
+        print ("robotator_app: data_received", data)
+        self.screen_manager.get_screen('Screen2').ids['callabck_label'].text = data
 if __name__ == "__main__":
     RobotatorApp().run()
