@@ -5,7 +5,9 @@ import json
 import random
 from kivy_communication import *
 import sys
-
+import time
+import os
+import subprocess
 
 class MyScreenManager (ScreenManager):
     the_app = None
@@ -42,9 +44,13 @@ class Screen2 (Screen):
         super(Screen, self).__init__()
 
 
+
 class RobotatorApp(App):  #The name of the class will make it search for learning2.kv
     def build(self):
         self.the_app = self
+        self.basic_server_ip = '192.168.0.10'
+        self.server_ip_end = 0
+
         #return ScatterTextWidget ()
         #self.twisted_server = FakeTwistedServer()
         self.screen_manager = MyScreenManager()
@@ -53,21 +59,12 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
         self.screen_manager.add_widget(screen1)
         self.screen_manager.add_widget(screen2)
         self.screen_manager.current = 'Screen2'
-        self.init_communication()
-
+        self.try_connection()
         return self.screen_manager
-
-    def init_communication(self):
-        local_ip = '192.168.1.254'
-        server_ip = '192.168.0.105'
-        try:
-            KC.start(the_parents=[self, self.the_app], the_ip=server_ip)  # 127.0.0.1
-            KL.start(mode=[DataMode.file, DataMode.communication, DataMode.ros], pathname=self.user_data_dir, the_ip=server_ip)
-        except:
-            print ("unexpected error:", sys.exc_info())
 
     def on_connection(self):
         KL.log.insert(action=LogAction.data, obj='RobotatorApp', comment='start')
+        print("the client status on_connection", KC.client.status)
 
     def robot_say(self, text):
         print ("robot say", text)
@@ -88,5 +85,22 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
     def data_received(self, data):
         print ("robotator_app: data_received", data)
         self.screen_manager.get_screen('Screen2').ids['callabck_label'].text = data
+
+    # ==== communicatoin =====
+    def try_connection(self):
+        server_ip = self.basic_server_ip + str(self.server_ip_end)
+        KC.start(the_parents=[self], the_ip=server_ip)  # 127.0.0.1
+        KL.start(mode=[DataMode.file, DataMode.communication, DataMode.ros], pathname=self.user_data_dir,
+             the_ip=server_ip)
+
+    def failed_connection(self):
+        self.server_ip_end += 1
+        if self.server_ip_end < 9:
+            self.try_connection()
+
+    def success_connection(self):
+        self.server_ip_end = 99
+        self.screen_manager.current = 'Screen2'
+
 if __name__ == "__main__":
     RobotatorApp().run()

@@ -3,14 +3,17 @@ from kivy.support import install_twisted_reactor
 install_twisted_reactor()
 from twisted.internet import reactor, protocol
 import sys
-
+import time
 # the static class for the kivy communication
 class KC:
     client = None
 
     @staticmethod
     def start(the_parents=None, the_ip=None):
-        KC.client = TwistedClient(the_parents=the_parents, the_ip=the_ip)
+        try:
+            KC.client = TwistedClient(the_parents=the_parents, the_ip=the_ip)
+        except:
+            print ("KC unexpected error:", sys.exc_info())
 
     def __init__(self):
         pass
@@ -42,9 +45,16 @@ class EchoFactory(protocol.ClientFactory):
 
     def clientConnectionLost(self, conn, reason):
         self.client.send_status("connection lost:" + str(conn) + str(reason))
+        TwistedClient.status = False
 
     def clientConnectionFailed(self, conn, reason):
         self.client.send_status("connection failed:" + str(conn) + str(reason))
+        TwistedClient.status = False
+        for p in TwistedClient.parents:
+            try:
+                p.failed_connection()
+            except:
+                pass
 
 
 class TwistedClient:
@@ -52,10 +62,12 @@ class TwistedClient:
     parents = None
     ip = None
     factory = None
+    status = None
 
     def __init__(self, the_parents=None, the_ip=None):
         TwistedClient.parents = the_parents
         TwistedClient.ip = the_ip
+
         TwistedClient.factory = EchoFactory(TwistedClient)
 
     @staticmethod
@@ -72,13 +84,22 @@ class TwistedClient:
             TwistedClient.send_status('connecting to ' + TwistedClient.ip)
 
             reactor.connectTCP(TwistedClient.ip, 8000, TwistedClient.factory)
+            print ("after reactor.connectTCP")
         else:
             TwistedClient.print_message('missing ip!')
 
     @staticmethod
     def on_connection(connection):
+        print("on_connection")
+        TwistedClient.status = True
         TwistedClient.send_status("connected successfully!")
         TwistedClient.connection = connection
+        for p in TwistedClient.parents:
+            try:
+                p.success_connection()
+            except:
+                pass
+
 
     @staticmethod
     def send_message(*args):
@@ -100,7 +121,13 @@ class TwistedClient:
                     p.send_status(status)
                 except:
                     pass
+        print(status[:15])
+        if (status[:15] == "connection lost"):
+            TwistedClient.status = False
+        elif (status[:15] == "connection fail"):
+            TwistedClient.status = False
         print('status: ', status)
+        print('TwistedClient.status',TwistedClient.status)
 
     @staticmethod
     def data_received(data):
