@@ -64,7 +64,7 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
 
     def on_connection(self):
         KL.log.insert(action=LogAction.data, obj='RobotatorApp', comment='start')
-        print("the client status on_connection", KC.client.status)
+        print("the client status on_connection ", KC.client.status)
 
     def robot_say(self, text):
         print ("robot say", text)
