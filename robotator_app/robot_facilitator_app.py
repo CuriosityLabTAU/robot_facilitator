@@ -69,7 +69,7 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
     def robot_say(self, text):
         print ("robot say", text)
         try:
-            nao_message = {'nao': {'action':'say_text_to_speech', 'parameters': [text]}}
+            nao_message = {'to_manager': {'action':'say_text_to_speech', 'parameters': [text]}}
             nao_message_str = str(json.dumps(nao_message))
             print("json.loads=", json.loads(nao_message_str))
             #self.twisted_server.send_message(nao_message_str)
