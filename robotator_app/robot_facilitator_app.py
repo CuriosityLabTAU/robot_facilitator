@@ -12,6 +12,15 @@ import subprocess
 class MyScreenManager (ScreenManager):
     the_app = None
 
+
+
+class ScreenRegister (Screen):
+    the_app = None
+    def __init__(self, the_app):
+        self.the_app = the_app
+        super(Screen, self).__init__()
+
+
 class Screen1 (Screen):
     the_app = None
 
@@ -56,15 +65,26 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
         self.screen_manager = MyScreenManager()
         screen1 = Screen1(self)
         screen2 = Screen2(self)
+        screen_register = ScreenRegister(self)
         self.screen_manager.add_widget(screen1)
         self.screen_manager.add_widget(screen2)
-        self.screen_manager.current = 'Screen2'
+        self.screen_manager.add_widget(screen_register)
+        self.screen_manager.current = 'ScreenRegister'
         self.try_connection()
         return self.screen_manager
 
     def on_connection(self):
         KL.log.insert(action=LogAction.data, obj='RobotatorApp', comment='start')
         print("the client status on_connection ", KC.client.status)
+
+
+    def register_tablet(self):
+        tablet_id = self.screen_manager.current_screen.ids['tablet_id'].text
+        subject_id = self.screen_manager.current_screen.ids['subject_id'].text
+        message = {'to_manager': {'action': 'register_tablet', 'parameters': {'subject_id':subject_id,'tablet_id':tablet_id}}}
+        message_str = str(json.dumps(message))
+        print("register_tablet", message_str)
+        KC.client.send_message(message_str)
 
     def robot_say(self, text):
         print ("robot say", text)
@@ -84,9 +104,9 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
 
     def data_received(self, data):
         print ("robotator_app: data_received", data)
-        self.screen_manager.get_screen('Screen2').ids['callabck_label'].text = data
+        self.screen_manager.get_screen('ScreenRegister').ids['callabck_label'].text = data
 
-    # ==== communicatoin =====
+    # ==== communicatoin to twisted server  KC: KivyClient KL: KivyLogger=====
     def try_connection(self):
         server_ip = self.basic_server_ip + str(self.server_ip_end)
         KC.start(the_parents=[self], the_ip=server_ip)  # 127.0.0.1
@@ -100,7 +120,7 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
 
     def success_connection(self):
         self.server_ip_end = 99
-        self.screen_manager.current = 'Screen2'
+       # self.screen_manager.current = 'Screen2'
 
 if __name__ == "__main__":
     RobotatorApp().run()
