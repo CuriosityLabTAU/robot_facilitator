@@ -20,6 +20,14 @@ class ScreenRegister (Screen):
         self.the_app = the_app
         super(Screen, self).__init__()
 
+    def start_interaction(self):
+        print(self.ids)
+
+    def data_received(self, data):
+        print ("ScreenRegister: data_received", data)
+        self.the_app.screen_manager.current = 'Screen1'
+        print("end")
+        #self.ids['callback_label'].text = data
 
 class Screen1 (Screen):
     the_app = None
@@ -81,7 +89,7 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
     def register_tablet(self):
         tablet_id = self.screen_manager.current_screen.ids['tablet_id'].text
         subject_id = self.screen_manager.current_screen.ids['subject_id'].text
-        message = {'to_manager': {'action': 'register_tablet', 'parameters': {'subject_id':subject_id,'tablet_id':tablet_id}}}
+        message = {'tablet_to_manager': {'action': 'register_tablet', 'parameters': {'subject_id':subject_id,'tablet_id':tablet_id}}}
         message_str = str(json.dumps(message))
         print("register_tablet", message_str)
         KC.client.send_message(message_str)
@@ -89,7 +97,7 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
     def robot_say(self, text):
         print ("robot say", text)
         try:
-            nao_message = {'to_manager': {'action':'say_text_to_speech', 'parameters': [text]}}
+            nao_message = {'tablet_to_manager': {'action':'say_text_to_speech', 'parameters': [text]}}
             nao_message_str = str(json.dumps(nao_message))
             print("json.loads=", json.loads(nao_message_str))
             #self.twisted_server.send_message(nao_message_str)
@@ -104,8 +112,15 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
 
     def data_received(self, data):
         print ("robotator_app: data_received", data)
-        self.screen_manager.get_screen('ScreenRegister').ids['callabck_label'].text = data
-
+        self.screen_manager.get_screen('ScreenRegister').ids['callback_label'].text = data
+        try:
+            json_data = json.loads(data)
+            print("data['action']", json_data['action'])
+            if (json_data['action']=='registration_complete'):
+                self.screen_manager.get_screen('ScreenRegister').data_received(json_data)
+                print("registration_complete")
+        except:
+            print("data_received err", sys.exc_info())
     # ==== communicatoin to twisted server  KC: KivyClient KL: KivyLogger=====
     def try_connection(self):
         server_ip = self.basic_server_ip + str(self.server_ip_end)

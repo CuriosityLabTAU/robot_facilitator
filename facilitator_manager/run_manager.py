@@ -6,15 +6,19 @@ from std_msgs.msg import String
 
 class ManagerNode():
 
-    tablets = {}    #in the form of {tablet_id:{"subject_id":subject_id, "tablet_ip";tablet_ip
+    tablets = {}    #in the form of {tablet_id_1:{"subject_id":subject_id, "tablet_ip";tablet_ip}
+                                    #,tablet_id_2:{"subject_id":subject_id, "tablet_ip";tablet_ip}
+
+    tablets_ips = {}
+    tablets_subjects_ids = {}
 
 
     def __init__(self):
-        self.robot_publisher = rospy.Publisher('nao_commands', String, queue_size=10)
-        self.tablet_publisher = rospy.Publisher('to_twisted', String, queue_size=10)
+        self.robot_publisher = rospy.Publisher('to_nao', String, queue_size=10)
+        self.tablet_publisher = rospy.Publisher('to_tablet', String, queue_size=10)
         rospy.init_node('manager_node') #init a listener:
         rospy.Subscriber('nao_state', String, self.callback_nao_state)
-        rospy.Subscriber('to_manager', String, self.callback_to_manager)
+        rospy.Subscriber('tablet_to_manager', String, self.callback_to_manager)
         rospy.spin() #spin() simply keeps python from exiting until this node is stopped
 
     def callback_nao_state(self, data):
@@ -34,15 +38,21 @@ class ManagerNode():
             self.robot_publisher.publish(data.data)
 
     def register_tablet(self, tablet_id, subject_id, client_ip):
-        print("register_tablet")
+        print("register_tablet", type(client_ip),client_ip)
         print(self.tablets)
-        self.tablets[tablet_id] = {"subject_id":subject_id, "tablet_ip":client_ip}
-        nao_message = {'action': 'say_text_to_speech', "client_ip":client_ip,'parameters': ["register tablet", "tablet_id",str(tablet_id), "subject id",str(subject_id)]}
-        self.robot_publisher.publish(json.dumps(nao_message))
-        if (len(self.tablets)==2):
-            message = {"action":"next_screen"}
-            self.tablet_publisher.publish(json.dumps(message))
+        self.tablets[tablet_id] = {'subject_id':subject_id, 'tablet_ip':client_ip}
+        self.tablets_subjects_ids[tablet_id] = subject_id
+        self.tablets_ips[tablet_id] = client_ip
 
+        nao_message = {'action': 'say_text_to_speech', 'client_ip':client_ip,'parameters': ['register tablet', 'tablet_id',str(tablet_id), 'subject id',str(subject_id)]}
+        self.robot_publisher.publish(json.dumps(nao_message))
+        if (len(self.tablets)>1):
+            print("two tablets are registered")
+
+            for key,value in self.tablets_ips.viewitems():
+                client_ip = value
+                message = {'action':'registration_complete','client_ip':client_ip}
+                self.tablet_publisher.publish(json.dumps(message))
 
     # def callback_to_manager_draft (self, data):
     #     direction = {1:"\"HeadPitch;0.0;0.1\"",2:"\"HeadPitch;29.0;0.1\""}
