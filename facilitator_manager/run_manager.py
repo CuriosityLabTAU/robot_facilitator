@@ -54,6 +54,17 @@ class ManagerNode():
                 message = {'action':'registration_complete','client_ip':client_ip}
                 self.tablet_publisher.publish(json.dumps(message))
 
+    def scene1(self):
+        print("start")
+        str_wav = '/home/nao/wav_facilitator/r1.wav'
+        self.robot_play_audio_file(str_wav)
+
+    def robot_play_audio_file (self, wav_path):
+        nao_message = {'action': 'play_audio_file', 'parameters': [wav_path]}
+        self.robot_publisher.publish(json.dumps(nao_message))
+        print("end start")
+
+
     # def callback_to_manager_draft (self, data):
     #     direction = {1:"\"HeadPitch;0.0;0.1\"",2:"\"HeadPitch;29.0;0.1\""}
     #     #direction = {1: 'HeadPitch;80.0;0.1', 2: 'HeadPitch;29.0;0.9'}
@@ -79,6 +90,7 @@ class ManagerNode():
 
 if __name__ == '__main__':
     try:
-        manager =ManagerNode()
+        manager = ManagerNode()
+        manager.scene1()
     except rospy.ROSInterruptException:
         pass

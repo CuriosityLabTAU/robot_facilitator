@@ -1,7 +1,7 @@
 #:import random random
 
 
-<ScreenRegister>
+<ScreenRegister>:
     name:'ScreenRegister'
     Widget:
         canvas.before:
@@ -66,6 +66,50 @@
             text:"callback"
             font_size: 16
             color: 1,1,1,1
+
+
+<ScreenAudience>:
+    name:'ScreenAudience'
+    Widget:
+        canvas.before:
+            Color:
+                rgba: 0.2,0.3,0.4,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            pos: root.width * 0, root.height * 0.9
+            size: root.width * 1, root.height * 0.05
+            id: audience_title
+            text:"test"
+            font_name: "fonts/the_font.ttf"
+            font_size: 16
+            color: 1,1,1,1
+        TextInput:
+            id: audience_list
+            font_size: 16
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.6
+            size: root.width * 0.8, root.height * 0.3
+        Label:
+            pos: root.width * 0, root.height * 0.45
+            size: root.width * 1, root.height * 0.05
+            id: audience_group_title
+            text:"םכלוכ לע תמכסומ תחא העד ושבג"
+            font_name: "fonts/the_font.ttf"
+            font_size: 16
+            color: 1,1,1,1
+            opacity: 1
+        TextInput:
+            id: audience_list_group
+            font_size: 16
+            text:"0"
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.05
+            size: root.width * 0.8, root.height * 0.3
+            opacity: 1
+
 
 <Screen100>:
     name: 'Screen100'

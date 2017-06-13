@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 #from fake_twisted_server import FakeTwistedServer
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -8,6 +11,7 @@ import sys
 import time
 import os
 import subprocess
+from hebrew_management import *
 
 class MyScreenManager (ScreenManager):
     the_app = None
@@ -25,9 +29,21 @@ class ScreenRegister (Screen):
 
     def data_received(self, data):
         print ("ScreenRegister: data_received", data)
-        self.the_app.screen_manager.current = 'Screen1'
+        self.the_app.screen_manager.current = 'ScreenAudience'
         print("end")
         #self.ids['callback_label'].text = data
+
+
+class ScreenAudience(Screen):
+    the_app = None
+    def __init__(self, the_app):
+        self.the_app = the_app
+        super(Screen, self).__init__()
+        audience_text = "ישיא דעי להק"
+        #audience_text = str(audience_text[::-1])
+      #  print(audience_text, audience_text[::-1])
+        self.ids["audience_title"].text = audience_text #HebrewManagement.multiline(, num_char=30, start_to_end=True)
+
 
 class Screen1 (Screen):
     the_app = None
@@ -73,11 +89,14 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
         self.screen_manager = MyScreenManager()
         screen1 = Screen1(self)
         screen2 = Screen2(self)
+        screen_audience = ScreenAudience(self)
         screen_register = ScreenRegister(self)
         self.screen_manager.add_widget(screen1)
         self.screen_manager.add_widget(screen2)
         self.screen_manager.add_widget(screen_register)
+        self.screen_manager.add_widget(screen_audience)
         self.screen_manager.current = 'ScreenRegister'
+        self.screen_manager.current = 'ScreenAudience'
         self.try_connection()
         return self.screen_manager
 
