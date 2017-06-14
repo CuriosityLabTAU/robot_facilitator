@@ -12,6 +12,24 @@ import time
 import os
 import subprocess
 from hebrew_management import *
+from kivy.clock import *
+from kivy.uix.label import Label
+
+
+class TimerLabel(Label):
+
+    def start_timer(self, duration=5):
+        self.time = duration
+        self.event = Clock.schedule_interval(self.advance, 1)
+        self.text = str(self.time)
+
+    def advance(self, dt):
+        self.text = str(self.time)
+        if self.time <= 0:
+            Clock.unschedule(self.event)
+            self.text = 'רמגנ'
+        else:
+            self.time -= 1
 
 
 class MyScreenManager (ScreenManager):
@@ -70,6 +88,9 @@ class ScreenAudience(Screen):
         self.ids["audience_list_5"].bind(text=self.ids["audience_list_5"].on_text_change)
 
         self.ids["audience_list_1"].focus=True
+        # self.ids['timer_time'].start_timer()
+
+
 
 
 class ScreenAudienceGroup(Screen):
@@ -271,14 +292,14 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
 
         # self.screen_manager.current = 'ScreenRegister'
         # self.screen_manager.current = 'ScreenHello'
-        # self.screen_manager.current = 'ScreenAudience'
+        self.screen_manager.current = 'ScreenAudience'
         # self.screen_manager.current = 'ScreenAudienceGroup'
         # self.screen_manager.current = 'ScreenAudienceAgree'
         # self.screen_manager.current = 'ScreenAudienceQuestions'
         # self.screen_manager.current = 'ScreenAudienceQuestionsGroup'
         # self.screen_manager.current = 'ScreenStartSimulation'
         # self.screen_manager.current = 'ScreenSimulation'
-        self.screen_manager.current = 'ScreenBye'
+        # self.screen_manager.current = 'ScreenBye'
 
         self.try_connection()
         return self.screen_manager
