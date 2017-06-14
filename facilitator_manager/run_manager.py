@@ -19,13 +19,41 @@ class ManagerNode():
         rospy.init_node('manager_node') #init a listener:
         rospy.Subscriber('nao_state', String, self.callback_nao_state)
         rospy.Subscriber('tablet_to_manager', String, self.callback_to_manager)
-        rospy.spin() #spin() simply keeps python from exiting until this node is stopped
+        #rospy.spin() #spin() simply keeps python from exiting until this node is stopped
+
+        self.waiting = False
+
+
+    def run_study(self):
+        with open("robotator_study.json") as data_file:
+            logics_json = json.load(data_file)
+            #self.poses_conditions = logics_json['conditions']
+            self.study_sequence = logics_json['sequence']
+            for action in self.study_sequence[:3]:
+                print ("action",action["action"])
+                if (action["action"] == "run_behavior" or action["action"]=="rest"):
+                    print("if", action)
+                    nao_message = action
+                    self.robot_publisher.publish(json.dumps(nao_message))
+                    self.waiting = True
+                    while self.waiting:
+                        pass
+                # if (action['action'] == 'show_screen'):
+                #     if "tablets" in action:
+                #         for tablet in action['tablets']:
+
+
+
+        # nao_message = {'action': 'say_text_to_speech', 'parameters': ['hello']}
+        # self.robot_publisher.publish(json.dumps(nao_message))
+
 
     def callback_nao_state(self, data):
         print("manager callback_nao_state", data.data)
-        message = data.data
-        rospy.loginfo(message)
-        self.tablet_publisher.publish(message)
+        self.waiting = False
+        # message = data.data
+        # rospy.loginfo(message)
+        # self.tablet_publisher.publish(message)
         # self.nao.parse_message(message)
 
     def callback_to_manager(self, data):
@@ -91,6 +119,6 @@ class ManagerNode():
 if __name__ == '__main__':
     try:
         manager = ManagerNode()
-        manager.scene1()
+        manager.run_study()
     except rospy.ROSInterruptException:
         pass

@@ -1,0 +1,23 @@
+{
+  "sequence": [
+    {"action":"show_screen", "screen_name":"ScreenHello", "tablets":[1,2,3,4,5]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/r1", "wait"]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/r2", "wait"]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/r3", "wait"]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/r4", "wait"]},
+    {"action":"show_screen", "screen_name":"ScreenAudience", "tablets":[1,2,3,4,5]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/r6", "wait"]},
+    {"action":"rest"},
+    {"action":"sleep", "seconds":"120"},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/r9", "wait"]},
+    {"action":"run_behavior_special", "parameters":["r10", "wait"]},
+    {"action":"run_behavior_special", "parameters":["r11", "wait"]},
+    {"action":"run_behavior_special", "parameters":["r12", "wait"]},
+    {"action":"rest"},
+    {"action":"sleep", "seconds":"60"},
+    {"action":"show_screen", "screen_name":"ScreenAudience", "tablets":[2]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/r16"]},
+    {"action":"rest"},
+    {"action":"sleep", "seconds":"60"}
+  ]
+}
