@@ -83,33 +83,48 @@
             id: audience_title
             text:"test"
             font_name: "fonts/the_font.ttf"
-            font_size: 16
+            font_size: 24
             color: 1,1,1,1
         TextInput:
-            id: audience_list
-            font_size: 16
+            id: audience_list_1
+            font_size: 24
             text:""
             font_name: "fonts/the_font.ttf"
-            pos: root.width * 0.1, root.height * 0.6
-            size: root.width * 0.8, root.height * 0.3
-        Label:
-            pos: root.width * 0, root.height * 0.45
-            size: root.width * 1, root.height * 0.05
-            id: audience_group_title
-            text:"םכלוכ לע תמכסומ תחא העד ושבג"
-            font_name: "fonts/the_font.ttf"
-            font_size: 16
-            color: 1,1,1,1
-            opacity: 1
+            pos: root.width * 0.1, root.height * 0.8
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
         TextInput:
-            id: audience_list_group
-            font_size: 16
-            text:"0"
+            id: audience_list_2
+            font_size: 24
+            text:""
             font_name: "fonts/the_font.ttf"
-            pos: root.width * 0.1, root.height * 0.05
-            size: root.width * 0.8, root.height * 0.3
-            opacity: 1
-
+            pos: root.width * 0.1, root.height * 0.74
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+        TextInput:
+            id: audience_list_3
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.68
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+        TextInput:
+            id: audience_list_4
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.62
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+        TextInput:
+            id: audience_list_5
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.56
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
 
 <ScreenAudienceGroup>:
     name:'ScreenAudienceGroup'
@@ -121,7 +136,7 @@
                 pos: self.pos
                 size: self.size
         Label:
-            pos: root.width * 0, root.height * 0.45
+            pos: root.width * 0, root.height * 0.9
             size: root.width * 1, root.height * 0.05
             id: audience_group_title
             text:"םכלוכ לע תמכסומ תחא העד ושבג"
@@ -132,9 +147,9 @@
         TextInput:
             id: audience_list_group
             font_size: 16
-            text:"0"
+            text:""
             font_name: "fonts/the_font.ttf"
-            pos: root.width * 0.1, root.height * 0.05
+            pos: root.width * 0.1, root.height * 0.6
             size: root.width * 0.8, root.height * 0.3
             opacity: 1
 
@@ -187,6 +202,196 @@
             size: root.width * 0.15, root.height * 0.1
             pos: root.width * 0.25, root.height * 0.45
             on_press: app.agree_audience_list(False)
+
+<ScreenAudienceQuestions>:
+    name:'ScreenAudienceQuestions'
+    Widget:
+        canvas.before:
+            Color:
+                rgba: 0.2,0.3,0.4,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            pos: root.width * 0, root.height * 0.9
+            size: root.width * 1, root.height * 0.05
+            id: audience_questions_title
+            text:"test"
+            font_name: "fonts/the_font.ttf"
+            font_size: 16
+            color: 1,1,1,1
+        TextInput:
+            id: audience_questions_list
+            font_size: 16
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.6
+            size: root.width * 0.8, root.height * 0.3
+
+<ScreenAudienceQuestionsGroup>:
+    name:'ScreenAudienceQuestionsGroup'
+    Widget:
+        canvas.before:
+            Color:
+                rgba: 0.2,0.3,0.4,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            pos: root.width * 0, root.height * 0.9
+            size: root.width * 1, root.height * 0.05
+            id: audience_questions_group_title
+            text:"test"
+            font_name: "fonts/the_font.ttf"
+            font_size: 16
+            color: 1,1,1,1
+        TextInput:
+            id: audience_questions_group_list
+            font_size: 16
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.6
+            size: root.width * 0.8, root.height * 0.3
+
+<ScreenSimulation>:
+    name:'ScreenSimulation'
+    Widget:
+        canvas.before:
+            Color:
+                rgba: 0.2,0.3,0.4,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            pos: root.width * 0, root.height * 0.9
+            size: root.width * 1, root.height * 0.05
+            id: simulation_title
+            text:"test"
+            font_name: "fonts/the_font.ttf"
+            font_size: 16
+            color: 1,1,1,1
+
+        GridLayout:
+            cols:2
+            spacing: '20dp'
+            size: root.width * 0.5,root.height * 0.2
+            pos: root.width * 0.25, root.height * 0.5
+
+
+            LoggedSpinner:
+                id: spinner1
+                text: 'הייטה'
+                font_size: 16
+                font_name: "fonts/the_font.ttf"
+                background_color: 0.2,0.2,0.2,1
+                values: ('תומידקה תייטה','רושיאה תייטה','תרוקיב לבקל ישוקה לש הייטה')
+                size: root.width * 0.15, root.height * 0.08
+                pos: root.width * 0, root.height * 0.9
+                on_text:
+
+            Label:
+                pos: root.width * 0, root.height * 0.9
+                size: root.width * 1, root.height * 0.08
+                id: label_spinner1
+                text:"1 ןייסנ"
+                font_name: "fonts/the_font.ttf"
+                font_size: 16
+                color: 1,1,1,1
+
+            LoggedSpinner:
+                id: spinner2
+                text: 'הייטה'
+                font_size: 16
+                font_name: "fonts/the_font.ttf"
+                background_color: 0.2,0.2,0.2,1
+                values: ('תומידקה תייטה','רושיאה תייטה','תרוקיב לבקל ישוקה לש הייטה')
+                size: root.width * 0.15, root.height * 0.08
+                pos:root.width * 0, root.height * 0.7
+                on_text:
+
+            Label:
+                pos: root.width * 0, root.height * 0.7
+                size: root.width * 1, root.height * 0.08
+                id: label_spinner2
+                text:"2 ןייסנ"
+                font_name: "fonts/the_font.ttf"
+                font_size: 16
+                color: 1,1,1,1
+
+            LoggedSpinner:
+                id: spinner3
+                text: 'הייטה'
+                font_size: 16
+                font_name: "fonts/the_font.ttf"
+                background_color: 0.2,0.2,0.2,1
+                values: ('תומידקה תייטה','רושיאה תייטה','תרוקיב לבקל ישוקה לש הייטה')
+                size: root.width * 0.15, root.height * 0.08
+                pos:root.width * 0, root.height * 0.7
+                on_text:
+
+            Label:
+                pos: root.width * 0, root.height * 0.7
+                size: root.width * 1, root.height * 0.08
+                id: label_spinner3
+                text:"3 ןייסנ"
+                font_name: "fonts/the_font.ttf"
+                font_size: 16
+                color: 1,1,1,1
+
+            LoggedSpinner:
+                id: spinner4
+                text: 'הייטה'
+                font_size: 16
+                font_name: "fonts/the_font.ttf"
+                background_color: 0.2,0.2,0.2,1
+                values: ('הרק תמאב המ חוכשל הייטה','הייצרה תייטה')
+                size: root.width * 0.15, root.height * 0.08
+                pos:root.width * 0, root.height * 0.7
+                on_text:
+
+            Label:
+                pos: root.width * 0, root.height * 0.7
+                size: root.width * 1, root.height * 0.08
+                id: label_spinner4
+                text:"1 קדבנ"
+                font_name: "fonts/the_font.ttf"
+                font_size: 16
+                color: 1,1,1,1
+
+            LoggedSpinner:
+                id: spinner5
+                text: 'הייטה'
+                font_size: 16
+                font_name: "fonts/the_font.ttf"
+                background_color: 0.2,0.2,0.2,1
+                values: ('הרק תמאב המ חוכשל הייטה','הייצרה תייטה')
+                size: root.width * 0.15, root.height * 0.08
+                pos:root.width * 0, root.height * 0.7
+                on_text:
+
+            Label:
+                pos: root.width * 0, root.height * 0.7
+                size: root.width * 1, root.height * 0.08
+                id: label_spinner5
+                text:"2 קדבנ"
+                font_name: "fonts/the_font.ttf"
+                font_size: 16
+                color: 1,1,1,1
+
+        LoggedButton:
+            id: agree_audience_list
+            name: 'agree_audience_list'
+            background_color: 0,0.5,0.5,1
+            background_normal: ''
+            text: 'אל'
+            font_size: 16
+            font_name: "fonts/the_font.ttf"
+            size: root.width * 0.15, root.height * 0.1
+            pos: root.width * 0.25, root.height * 0.45
+            on_press: app.simulation_spinners_submit()
+
+
+
 
 <Screen100>:
     name: 'Screen100'
