@@ -44,6 +44,28 @@ class ScreenAudience(Screen):
       #  print(audience_text, audience_text[::-1])
         self.ids["audience_title"].text = audience_text #HebrewManagement.multiline(, num_char=30, start_to_end=True)
 
+class ScreenAudienceGroup(Screen):
+    the_app = None
+    def __init__(self, the_app):
+        self.the_app = the_app
+        super(Screen, self).__init__()
+        audience_group_title = "ישיא דעי להק"
+        #audience_text = str(audience_text[::-1])
+      #  print(audience_text, audience_text[::-1])
+        self.ids["audience_group_title"].text = audience_group_title #HebrewManagement.multiline(, num_char=30, start_to_end=True)
+
+
+class ScreenAudienceAgree(Screen):
+    the_app = None
+    def __init__(self, the_app):
+        self.the_app = the_app
+        super(Screen, self).__init__()
+        audience_text = "?תאזה המישרה םע ה/םיכסמ ה/תא םאה"
+        #audience_text = str(audience_text[::-1])
+      #  print(audience_text, audience_text[::-1])
+        self.ids["audience_title"].text = audience_text #HebrewManagement.multiline(, num_char=30, start_to_end=True)
+
+
 
 class Screen1 (Screen):
     the_app = None
@@ -90,13 +112,19 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
         screen1 = Screen1(self)
         screen2 = Screen2(self)
         screen_audience = ScreenAudience(self)
+        screen_audience_group = ScreenAudienceGroup(self)
+        screen_audience_agree = ScreenAudienceAgree(self)
         screen_register = ScreenRegister(self)
         self.screen_manager.add_widget(screen1)
         self.screen_manager.add_widget(screen2)
         self.screen_manager.add_widget(screen_register)
         self.screen_manager.add_widget(screen_audience)
-        self.screen_manager.current = 'ScreenRegister'
-        self.screen_manager.current = 'ScreenAudience'
+        self.screen_manager.add_widget(screen_audience_group)
+        self.screen_manager.add_widget(screen_audience_agree)
+        #self.screen_manager.current = 'ScreenRegister'
+        #self.screen_manager.current = 'ScreenAudience'
+        #self.screen_manager.current = 'ScreenAudienceGroup'
+        self.screen_manager.current = 'ScreenAudienceAgree'
         self.try_connection()
         return self.screen_manager
 
@@ -112,6 +140,12 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
         message_str = str(json.dumps(message))
         print("register_tablet", message_str)
         KC.client.send_message(message_str)
+
+    def agree_audience_list(self, agree):
+        if agree:
+            print("agree")
+        else:
+            print("disagree")
 
     def robot_say(self, text):
         print ("robot say", text)
