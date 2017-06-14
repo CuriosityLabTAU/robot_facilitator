@@ -13,16 +13,20 @@ import os
 import subprocess
 from hebrew_management import *
 
+
 class MyScreenManager (ScreenManager):
     the_app = None
 
 
-
 class ScreenRegister (Screen):
     the_app = None
+
     def __init__(self, the_app):
         self.the_app = the_app
         super(Screen, self).__init__()
+
+        self.ids["tablet_id"].bind(text=self.ids["tablet_id"].on_text_change)
+        self.ids["subject_id"].bind(text=self.ids["subject_id"].on_text_change)
 
     def start_interaction(self):
         print(self.ids)
@@ -34,8 +38,17 @@ class ScreenRegister (Screen):
         #self.ids['callback_label'].text = data
 
 
+class ScreenHello (Screen):
+    the_app = None
+
+    def __init__(self, the_app):
+        self.the_app = the_app
+        super(Screen, self).__init__()
+
+
 class ScreenAudience(Screen):
     the_app = None
+
     def __init__(self, the_app):
         self.the_app = the_app
         super(Screen, self).__init__()
@@ -50,9 +63,18 @@ class ScreenAudience(Screen):
         self.ids["audience_list_4"].bind(text=HebrewManagement.text_change)
         self.ids["audience_list_5"].bind(text=HebrewManagement.text_change)
 
+        self.ids["audience_list_1"].bind(text=self.ids["audience_list_1"].on_text_change)
+        self.ids["audience_list_2"].bind(text=self.ids["audience_list_2"].on_text_change)
+        self.ids["audience_list_3"].bind(text=self.ids["audience_list_3"].on_text_change)
+        self.ids["audience_list_4"].bind(text=self.ids["audience_list_4"].on_text_change)
+        self.ids["audience_list_5"].bind(text=self.ids["audience_list_5"].on_text_change)
+
+        self.ids["audience_list_1"].focus=True
+
 
 class ScreenAudienceGroup(Screen):
     the_app = None
+
     def __init__(self, the_app):
         self.the_app = the_app
         super(Screen, self).__init__()
@@ -60,9 +82,34 @@ class ScreenAudienceGroup(Screen):
         #audience_text = str(audience_text[::-1])
       #  print(audience_text, audience_text[::-1])
         self.ids["audience_group_title"].text = audience_group_title #HebrewManagement.multiline(, num_char=30, start_to_end=True)
+        self.ids["audience_list_group_1"].bind(text=HebrewManagement.text_change)
+        self.ids["audience_list_group_2"].bind(text=HebrewManagement.text_change)
+        self.ids["audience_list_group_3"].bind(text=HebrewManagement.text_change)
+        self.ids["audience_list_group_4"].bind(text=HebrewManagement.text_change)
+        self.ids["audience_list_group_5"].bind(text=HebrewManagement.text_change)
+
+        self.ids["audience_list_group_1"].bind(text=self.ids["audience_list_group_1"].on_text_change)
+        self.ids["audience_list_group_2"].bind(text=self.ids["audience_list_group_2"].on_text_change)
+        self.ids["audience_list_group_3"].bind(text=self.ids["audience_list_group_3"].on_text_change)
+        self.ids["audience_list_group_4"].bind(text=self.ids["audience_list_group_4"].on_text_change)
+        self.ids["audience_list_group_5"].bind(text=self.ids["audience_list_group_5"].on_text_change)
+
+        self.ids["audience_list_group_1"].focus=True
+
+
+class ScreenAudienceAgree(Screen):
+    the_app = None
+
+    def __init__(self, the_app):
+        self.the_app = the_app
+        super(Screen, self).__init__()
+        audience_text = "?תאזה המישרה םע ה/םיכסמ ה/תא םאה"
+        self.ids["audience_title"].text = audience_text
+
 
 class ScreenAudienceQuestions(Screen):
     the_app = None
+
     def __init__(self, the_app):
         self.the_app = the_app
         super(Screen, self).__init__()
@@ -70,6 +117,17 @@ class ScreenAudienceQuestions(Screen):
         #audience_text = str(audience_text[::-1])
       #  print(audience_text, audience_text[::-1])
         self.ids["audience_questions_title"].text = audience_text #HebrewManagement.multiline(, num_char=30, start_to_end=True)
+
+        self.ids["audience_questions_list_1"].bind(text=HebrewManagement.text_change)
+        self.ids["audience_questions_list_2"].bind(text=HebrewManagement.text_change)
+        self.ids["audience_questions_list_3"].bind(text=HebrewManagement.text_change)
+
+        self.ids["audience_questions_list_1"].bind(text=self.ids["audience_questions_list_1"].on_text_change)
+        self.ids["audience_questions_list_2"].bind(text=self.ids["audience_questions_list_2"].on_text_change)
+        self.ids["audience_questions_list_3"].bind(text=self.ids["audience_questions_list_3"].on_text_change)
+
+        self.ids["audience_questions_list_1"].focus=True
+
 
 class ScreenAudienceQuestionsGroup(Screen):
     the_app = None
@@ -81,16 +139,33 @@ class ScreenAudienceQuestionsGroup(Screen):
       #  print(audience_text, audience_text[::-1])
         self.ids["audience_questions_group_title"].text = audience_group_title #HebrewManagement.multiline(, num_char=30, start_to_end=True)
 
+        self.ids["audience_questions_group_list_1"].bind(text=HebrewManagement.text_change)
+        self.ids["audience_questions_group_list_2"].bind(text=HebrewManagement.text_change)
+        self.ids["audience_questions_group_list_3"].bind(text=HebrewManagement.text_change)
+        self.ids["audience_questions_group_list_4"].bind(text=HebrewManagement.text_change)
+        self.ids["audience_questions_group_list_5"].bind(text=HebrewManagement.text_change)
 
-class ScreenAudienceAgree(Screen):
+
+        self.ids["audience_questions_group_list_1"].bind(text=self.ids["audience_questions_group_list_1"].on_text_change)
+        self.ids["audience_questions_group_list_2"].bind(text=self.ids["audience_questions_group_list_2"].on_text_change)
+        self.ids["audience_questions_group_list_3"].bind(text=self.ids["audience_questions_group_list_3"].on_text_change)
+        self.ids["audience_questions_group_list_4"].bind(text=self.ids["audience_questions_group_list_4"].on_text_change)
+        self.ids["audience_questions_group_list_5"].bind(text=self.ids["audience_questions_group_list_5"].on_text_change)
+
+        self.ids["audience_questions_group_list_1"].focus=True
+
+
+class ScreenStartSimulation(Screen):
     the_app = None
+
     def __init__(self, the_app):
         self.the_app = the_app
         super(Screen, self).__init__()
-        audience_text = "?תאזה המישרה םע ה/םיכסמ ה/תא םאה"
-        #audience_text = str(audience_text[::-1])
-      #  print(audience_text, audience_text[::-1])
-        self.ids["audience_title"].text = audience_text #HebrewManagement.multiline(, num_char=30, start_to_end=True)
+        title = "תויהל תרחבנ"
+        self.ids['start_simulation_role'].text = title
+        title = "ךלש הייטהה"
+        self.ids['start_simulation_bias'].text = title
+
 
 class ScreenSimulation(Screen):
     the_app = None
@@ -101,6 +176,27 @@ class ScreenSimulation(Screen):
         #audience_text = str(audience_text[::-1])
       #  print(audience_text, audience_text[::-1])
         self.ids['simulation_title'].text = title #HebrewManagement.multiline(, num_char=30, start_to_end=True)
+
+        self.ids['simulation_spinner_1'].option_cls = MySpinnerOption
+        self.ids['simulation_spinner_2'].option_cls = MySpinnerOption
+        self.ids['simulation_spinner_3'].option_cls = MySpinnerOption
+        self.ids['simulation_spinner_4'].option_cls = MySpinnerOption
+        self.ids['simulation_spinner_5'].option_cls = MySpinnerOption
+
+
+        self.ids["simulation_spinner_1"].bind(text=self.ids["simulation_spinner_1"].on_text_change)
+        self.ids["simulation_spinner_2"].bind(text=self.ids["simulation_spinner_2"].on_text_change)
+        self.ids["simulation_spinner_3"].bind(text=self.ids["simulation_spinner_3"].on_text_change)
+        self.ids["simulation_spinner_4"].bind(text=self.ids["simulation_spinner_4"].on_text_change)
+        self.ids["simulation_spinner_5"].bind(text=self.ids["simulation_spinner_5"].on_text_change)
+
+
+class ScreenBye (Screen):
+    the_app = None
+
+    def __init__(self, the_app):
+        self.the_app = the_app
+        super(Screen, self).__init__()
 
 
 class Screen1 (Screen):
@@ -127,6 +223,7 @@ class Screen1 (Screen):
         else:
             print('The checkbox', checkbox, 'is inactive')
 
+
 class Screen2 (Screen):
     the_app = None
 
@@ -135,11 +232,11 @@ class Screen2 (Screen):
         super(Screen, self).__init__()
 
 
-
 class RobotatorApp(App):  #The name of the class will make it search for learning2.kv
     def build(self):
         self.the_app = self
         self.basic_server_ip = '192.168.0.10'
+        self.basic_server_ip = '127.0.0.1'
         self.server_ip_end = 0
 
         #return ScatterTextWidget ()
@@ -149,30 +246,40 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
         screen2 = Screen2(self)
 
         screen_register = ScreenRegister(self)
+        screen_hello = ScreenHello(self)
         screen_audience = ScreenAudience(self)
         screen_audience_group = ScreenAudienceGroup(self)
         screen_audience_questions = ScreenAudienceQuestions(self)
         screen_audience_questions_group = ScreenAudienceQuestionsGroup(self)
         screen_audience_agree = ScreenAudienceAgree(self)
+        screen_start_simulation = ScreenStartSimulation(self)
         screen_simulation = ScreenSimulation(self)
+        screen_bye = ScreenBye(self)
 
         self.screen_manager.add_widget(screen1)
         self.screen_manager.add_widget(screen2)
         self.screen_manager.add_widget(screen_register)
+        self.screen_manager.add_widget(screen_hello)
         self.screen_manager.add_widget(screen_audience)
         self.screen_manager.add_widget(screen_audience_group)
         self.screen_manager.add_widget(screen_audience_agree)
         self.screen_manager.add_widget(screen_audience_questions)
         self.screen_manager.add_widget(screen_audience_questions_group)
+        self.screen_manager.add_widget(screen_start_simulation)
         self.screen_manager.add_widget(screen_simulation)
+        self.screen_manager.add_widget(screen_bye)
 
-        #self.screen_manager.current = 'ScreenRegister'
-        self.screen_manager.current = 'ScreenAudience'
-        #self.screen_manager.current = 'ScreenAudienceGroup'
-        #self.screen_manager.current = 'ScreenAudienceAgree'
-        #self.screen_manager.current = 'ScreenAudienceQuestions'
-        #self.screen_manager.current = 'ScreenAudienceQuestionsGroup'
+        # self.screen_manager.current = 'ScreenRegister'
+        # self.screen_manager.current = 'ScreenHello'
+        # self.screen_manager.current = 'ScreenAudience'
+        # self.screen_manager.current = 'ScreenAudienceGroup'
+        # self.screen_manager.current = 'ScreenAudienceAgree'
+        # self.screen_manager.current = 'ScreenAudienceQuestions'
+        # self.screen_manager.current = 'ScreenAudienceQuestionsGroup'
+        # self.screen_manager.current = 'ScreenStartSimulation'
         # self.screen_manager.current = 'ScreenSimulation'
+        self.screen_manager.current = 'ScreenBye'
+
         self.try_connection()
         return self.screen_manager
 

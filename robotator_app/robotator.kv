@@ -26,8 +26,9 @@
             font_size: 16
             color: 1,1,1,1
 
-        TextInput:
+        LoggedTextInput:
             id: tablet_id
+            name: "tablet_id"
             font_size: 16
             text:"0"
             pos: root.width * 0.3, root.height * 0.8
@@ -41,8 +42,9 @@
             font_size: 16
             color: 1,1,1,1
 
-        TextInput:
+        LoggedTextInput:
             id: subject_id
+            name: "subject_id"
             font_size: 16
             text:"0"
             pos: root.width * 0.3, root.height * 0.7
@@ -68,6 +70,25 @@
             color: 1,1,1,1
 
 
+<ScreenHello>:
+    name: "ScreenHello"
+    Widget:
+        canvas.before:
+            Color:
+                rgba: 0.2,0.3,0.4,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            pos: root.width * 0, root.height * 0.9
+            size: root.width * 1, root.height * 0.05
+            id: audience_title
+            text:"םיאבה םיכורב"
+            font_name: "fonts/the_font.ttf"
+            font_size: 48
+            color: 1,1,1,1
+
+
 <ScreenAudience>:
     name:'ScreenAudience'
     Widget:
@@ -83,42 +104,47 @@
             id: audience_title
             text:"test"
             font_name: "fonts/the_font.ttf"
-            font_size: 24
+            font_size: 48
             color: 1,1,1,1
-        TextInput:
+        LoggedTextInput:
             id: audience_list_1
+            name: "audience_list_1"
             font_size: 24
             text:""
             font_name: "fonts/the_font.ttf"
             pos: root.width * 0.1, root.height * 0.8
             size: root.width * 0.8, root.height * 0.06
             multiline: False
-        TextInput:
+        LoggedTextInput:
             id: audience_list_2
+            name: "audience_list_2"
             font_size: 24
             text:""
             font_name: "fonts/the_font.ttf"
             pos: root.width * 0.1, root.height * 0.74
             size: root.width * 0.8, root.height * 0.06
             multiline: False
-        TextInput:
+        LoggedTextInput:
             id: audience_list_3
+            name: "audience_list_3"
             font_size: 24
             text:""
             font_name: "fonts/the_font.ttf"
             pos: root.width * 0.1, root.height * 0.68
             size: root.width * 0.8, root.height * 0.06
             multiline: False
-        TextInput:
+        LoggedTextInput:
             id: audience_list_4
+            name: "audience_list_4"
             font_size: 24
             text:""
             font_name: "fonts/the_font.ttf"
             pos: root.width * 0.1, root.height * 0.62
             size: root.width * 0.8, root.height * 0.06
             multiline: False
-        TextInput:
+        LoggedTextInput:
             id: audience_list_5
+            name: "audience_list_5"
             font_size: 24
             text:""
             font_name: "fonts/the_font.ttf"
@@ -141,17 +167,54 @@
             id: audience_group_title
             text:"םכלוכ לע תמכסומ תחא העד ושבג"
             font_name: "fonts/the_font.ttf"
-            font_size: 16
+            font_size: 48
             color: 1,1,1,1
             opacity: 1
-        TextInput:
-            id: audience_list_group
-            font_size: 16
+        LoggedTextInput:
+            id: audience_list_group_1
+            name: "audience_list_group_1"
+            font_size: 24
             text:""
             font_name: "fonts/the_font.ttf"
-            pos: root.width * 0.1, root.height * 0.6
-            size: root.width * 0.8, root.height * 0.3
-            opacity: 1
+            pos: root.width * 0.1, root.height * 0.8
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+        LoggedTextInput:
+            id: audience_list_group_2
+            name: "audience_list_group_2"
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.74
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+        LoggedTextInput:
+            id: audience_list_group_3
+            name: "audience_list_group_3"
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.68
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+        LoggedTextInput:
+            id: audience_list_group_4
+            name: "audience_list_group_4"
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.62
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+        LoggedTextInput:
+            id: audience_list_group_5
+            name: "audience_list_group_5"
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.56
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
 
 
 <ScreenAudienceAgree>:
@@ -169,15 +232,16 @@
             id: audience_title
             text:"test"
             font_name: "fonts/the_font.ttf"
-            font_size: 16
+            font_size: 48
             color: 1,1,1,1
         TextInput:
             id: audience_list_group
-            font_size: 16
+            font_size: 24
             text:""
             font_name: "fonts/the_font.ttf"
             pos: root.width * 0.1, root.height * 0.6
             size: root.width * 0.8, root.height * 0.3
+            disabled: True
 
         LoggedButton:
             id: agree_audience_list
@@ -192,8 +256,8 @@
             on_press: app.agree_audience_list(True)
 
         LoggedButton:
-            id: agree_audience_list
-            name: 'agree_audience_list'
+            id: dont_agree_audience_list
+            name: 'dont_agree_audience_list'
             background_color: 0,0.5,0.5,1
             background_normal: ''
             text: 'אל'
@@ -218,15 +282,35 @@
             id: audience_questions_title
             text:"test"
             font_name: "fonts/the_font.ttf"
-            font_size: 16
+            font_size: 48
             color: 1,1,1,1
-        TextInput:
-            id: audience_questions_list
-            font_size: 16
+        LoggedTextInput:
+            id: audience_questions_list_1
+            name: "audience_questions_list_1"
+            font_size: 24
             text:""
             font_name: "fonts/the_font.ttf"
-            pos: root.width * 0.1, root.height * 0.6
-            size: root.width * 0.8, root.height * 0.3
+            pos: root.width * 0.1, root.height * 0.8
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+        LoggedTextInput:
+            id: audience_questions_list_2
+            name: "audience_questions_list_2"
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.74
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+        LoggedTextInput:
+            id: audience_questions_list_3
+            name: "audience_questions_list_3"
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.68
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
 
 <ScreenAudienceQuestionsGroup>:
     name:'ScreenAudienceQuestionsGroup'
@@ -243,15 +327,128 @@
             id: audience_questions_group_title
             text:"test"
             font_name: "fonts/the_font.ttf"
-            font_size: 16
+            font_size: 48
             color: 1,1,1,1
-        TextInput:
-            id: audience_questions_group_list
-            font_size: 16
+        LoggedTextInput:
+            id: audience_questions_group_list_1
+            name: "audience_questions_group_list_1"
+            font_size: 24
             text:""
             font_name: "fonts/the_font.ttf"
-            pos: root.width * 0.1, root.height * 0.6
-            size: root.width * 0.8, root.height * 0.3
+            pos: root.width * 0.1, root.height * 0.8
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+        LoggedTextInput:
+            id: audience_questions_group_list_2
+            name: "audience_questions_group_list_2"
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.74
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+        LoggedTextInput:
+            id: audience_questions_group_list_3
+            name: "audience_questions_group_list_3"
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.68
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+        LoggedTextInput:
+            id: audience_questions_group_list_4
+            name: "audience_questions_group_list_4"
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.62
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+        LoggedTextInput:
+            id: audience_questions_group_list_5
+            name: "audience_questions_group_list_5"
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.56
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+
+<ScreenStartSimulation>:
+    name:'ScreenStartSimulation'
+    Widget:
+        canvas.before:
+            Color:
+                rgba: 0.2,0.3,0.4,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            pos: root.width * 0, root.height * 0.9
+            size: root.width * 1, root.height * 0.05
+            id: start_simulation_role
+            text:"test"
+            font_name: "fonts/the_font.ttf"
+            font_size: 48
+            color: 1,1,1,1
+        Label:
+            pos: root.width * 0, root.height * 0.85
+            size: root.width * 1, root.height * 0.05
+            id: start_simulation_bias
+            text:"test"
+            font_name: "fonts/the_font.ttf"
+            font_size: 48
+            color: 1,1,1,1
+        TextInput:
+            id: start_simulation_question_1
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.75
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+            disabled: True
+        TextInput:
+            id: start_simulation_question_2
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.69
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+            disabled: True
+        TextInput:
+            id: start_simulation_question_3
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.63
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+            disabled: True
+        TextInput:
+            id: start_simulation_question_4
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.57
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+            disabled: True
+        TextInput:
+            id: start_simulation_question_5
+            font_size: 24
+            text:""
+            font_name: "fonts/the_font.ttf"
+            pos: root.width * 0.1, root.height * 0.51
+            size: root.width * 0.8, root.height * 0.06
+            multiline: False
+            disabled: True
+
+<MySpinnerOption@SpinnerOption>:
+    font_name: "fonts/the_font.ttf"
+    font_size: 24
 
 <ScreenSimulation>:
     name:'ScreenSimulation'
@@ -268,26 +465,26 @@
             id: simulation_title
             text:"test"
             font_name: "fonts/the_font.ttf"
-            font_size: 16
+            font_size: 48
             color: 1,1,1,1
 
         GridLayout:
             cols:2
             spacing: '20dp'
-            size: root.width * 0.5,root.height * 0.2
-            pos: root.width * 0.25, root.height * 0.5
+            size: root.width * 0.5,root.height * 0.4
+            pos: root.width * 0.25, root.height * 0.4
 
 
             LoggedSpinner:
-                id: spinner1
+                id: simulation_spinner_1
+                name: "simulation_spinner_1"
                 text: 'הייטה'
-                font_size: 16
+                font_size: 30
                 font_name: "fonts/the_font.ttf"
                 background_color: 0.2,0.2,0.2,1
                 values: ('תומידקה תייטה','רושיאה תייטה','תרוקיב לבקל ישוקה לש הייטה')
                 size: root.width * 0.15, root.height * 0.08
                 pos: root.width * 0, root.height * 0.9
-                on_text:
 
             Label:
                 pos: root.width * 0, root.height * 0.9
@@ -295,13 +492,14 @@
                 id: label_spinner1
                 text:"1 ןייסנ"
                 font_name: "fonts/the_font.ttf"
-                font_size: 16
+                font_size: 30
                 color: 1,1,1,1
 
             LoggedSpinner:
-                id: spinner2
+                id: simulation_spinner_2
+                name: "simulation_spinner_2"
                 text: 'הייטה'
-                font_size: 16
+                font_size: 30
                 font_name: "fonts/the_font.ttf"
                 background_color: 0.2,0.2,0.2,1
                 values: ('תומידקה תייטה','רושיאה תייטה','תרוקיב לבקל ישוקה לש הייטה')
@@ -315,13 +513,14 @@
                 id: label_spinner2
                 text:"2 ןייסנ"
                 font_name: "fonts/the_font.ttf"
-                font_size: 16
+                font_size: 30
                 color: 1,1,1,1
 
             LoggedSpinner:
-                id: spinner3
+                id: simulation_spinner_3
+                name: "simulation_spinner_3"
                 text: 'הייטה'
-                font_size: 16
+                font_size: 30
                 font_name: "fonts/the_font.ttf"
                 background_color: 0.2,0.2,0.2,1
                 values: ('תומידקה תייטה','רושיאה תייטה','תרוקיב לבקל ישוקה לש הייטה')
@@ -335,13 +534,14 @@
                 id: label_spinner3
                 text:"3 ןייסנ"
                 font_name: "fonts/the_font.ttf"
-                font_size: 16
+                font_size: 30
                 color: 1,1,1,1
 
             LoggedSpinner:
-                id: spinner4
+                id: simulation_spinner_4
+                name: "simulation_spinner_4"
                 text: 'הייטה'
-                font_size: 16
+                font_size: 30
                 font_name: "fonts/the_font.ttf"
                 background_color: 0.2,0.2,0.2,1
                 values: ('הרק תמאב המ חוכשל הייטה','הייצרה תייטה')
@@ -355,13 +555,14 @@
                 id: label_spinner4
                 text:"1 קדבנ"
                 font_name: "fonts/the_font.ttf"
-                font_size: 16
+                font_size: 30
                 color: 1,1,1,1
 
             LoggedSpinner:
-                id: spinner5
+                id: simulation_spinner_5
+                name: "simulation_spinner_5"
                 text: 'הייטה'
-                font_size: 16
+                font_size: 30
                 font_name: "fonts/the_font.ttf"
                 background_color: 0.2,0.2,0.2,1
                 values: ('הרק תמאב המ חוכשל הייטה','הייצרה תייטה')
@@ -375,19 +576,19 @@
                 id: label_spinner5
                 text:"2 קדבנ"
                 font_name: "fonts/the_font.ttf"
-                font_size: 16
+                font_size: 30
                 color: 1,1,1,1
 
         LoggedButton:
-            id: agree_audience_list
-            name: 'agree_audience_list'
+            id: finished_simulation
+            name: 'finished_simulation'
             background_color: 0,0.5,0.5,1
             background_normal: ''
-            text: 'אל'
+            text: 'יתמייס'
             font_size: 16
             font_name: "fonts/the_font.ttf"
             size: root.width * 0.15, root.height * 0.1
-            pos: root.width * 0.25, root.height * 0.45
+            pos: root.width * 0.05, root.height * 0.4
             on_press: app.simulation_spinners_submit()
 
 
@@ -493,3 +694,20 @@
             font_size: 16
             color: 1,1,1,1
 
+<ScreenBye>:
+    name: "ScreenBye"
+    Widget:
+        canvas.before:
+            Color:
+                rgba: 0.2,0.3,0.4,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            pos: root.width * 0, root.height * 0.9
+            size: root.width * 1, root.height * 0.05
+            id: audience_title
+            text:"תוארתהל"
+            font_name: "fonts/the_font.ttf"
+            font_size: 48
+            color: 1,1,1,1
