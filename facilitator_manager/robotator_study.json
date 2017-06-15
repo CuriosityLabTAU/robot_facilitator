@@ -1,5 +1,8 @@
 {
   "sequence": [
+    {"action":"show_screen", "screen_name":"ScreenAudience", "tablets":[1,2,3,4,5]},
+    {"action":"rest"},
+    {"action":"sleep", "seconds":"120"},
     {"action":"show_screen", "screen_name":"ScreenHello", "tablets":[1,2,3,4,5]},
     {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/r1", "wait"]},
     {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/r2", "wait"]},
@@ -10,14 +13,23 @@
     {"action":"rest"},
     {"action":"sleep", "seconds":"120"},
     {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/r9", "wait"]},
-    {"action":"run_behavior_special", "parameters":["r10", "wait"]},
-    {"action":"run_behavior_special", "parameters":["r11", "wait"]},
-    {"action":"run_behavior_special", "parameters":["r12", "wait"]},
+    {"action":"run_behavior_special", "parameters":["r10"]},
+    {"action":"sound_tracker"},
+    {"action":"rest"},
+    {"action":"sleep", "seconds":"120"},
+    {"action":"run_behavior_special", "parameters":["r12"]},
+    {"action":"rest"},
+    {"action":"sleep", "seconds":"30"},
+    {"action":"show_screen", "screen_name":"ScreenAudienceGroup", "tablets":[2]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/r14"]},
     {"action":"rest"},
     {"action":"sleep", "seconds":"60"},
-    {"action":"show_screen", "screen_name":"ScreenAudience", "tablets":[2]},
+    {"action":"show_screen", "screen_name":"ScreenAudienceAgree", "tablets":[1,2,3,4,5]},
     {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/r16"]},
-    {"action":"rest"},
-    {"action":"sleep", "seconds":"60"}
+    {"action":"sleep", "seconds":"30"},
+    {"action":"run_behavior_special", "parameters":["r17"]},
+    {"action":"sleep", "seconds":"30"},
+    {"action":"run_behavior", "parameters":["r19"]},
+    {"action":"run_behavior", "parameters":["r20"]}
   ]
 }

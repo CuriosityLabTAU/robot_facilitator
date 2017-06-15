@@ -51,7 +51,7 @@ class ScreenRegister (Screen):
 
     def data_received(self, data):
         print ("ScreenRegister: data_received", data)
-        self.the_app.screen_manager.current = 'ScreenAudience'
+        # self.the_app.screen_manager.current = 'ScreenAudience'
         print("end")
         #self.ids['callback_label'].text = data
 
@@ -88,7 +88,7 @@ class ScreenAudience(Screen):
         self.ids["audience_list_5"].bind(text=self.ids["audience_list_5"].on_text_change)
 
         self.ids["audience_list_1"].focus=True
-        # self.ids['timer_time'].start_timer()
+        self.ids['timer_time'].start_timer()
 
 
 
@@ -290,9 +290,9 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
         self.screen_manager.add_widget(screen_simulation)
         self.screen_manager.add_widget(screen_bye)
 
-        # self.screen_manager.current = 'ScreenRegister'
+        self.screen_manager.current = 'ScreenRegister'
         # self.screen_manager.current = 'ScreenHello'
-        self.screen_manager.current = 'ScreenAudience'
+        # self.screen_manager.current = 'ScreenAudience'
         # self.screen_manager.current = 'ScreenAudienceGroup'
         # self.screen_manager.current = 'ScreenAudienceAgree'
         # self.screen_manager.current = 'ScreenAudienceQuestions'
@@ -350,13 +350,36 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
         print ("robotator_app: data_received", data)
         self.screen_manager.get_screen('ScreenRegister').ids['callback_label'].text = data
         try:
-            json_data = json.loads(data)
-            print("data['action']", json_data['action'])
-            if (json_data['action']=='registration_complete'):
-                self.screen_manager.get_screen('ScreenRegister').data_received(json_data)
-                print("registration_complete")
+            json_data = [json.loads(data)]
         except:
-            print("data_received err", sys.exc_info())
+            json_data = []
+            spl = data.split('}{')
+            print(spl)
+            for k in range(0, len(spl)):
+                the_msg = spl[k]
+                if k > 0:
+                    the_msg = '{' + the_msg
+                if k < (len(spl) - 1):
+                    the_msg = the_msg + '}'
+                json_msg = json.loads(the_msg)
+                json_data.append(json_msg)
+            # print("data_received err", sys.exc_info())
+
+
+        for data in json_data:
+            print("data['action']", data['action'])
+            if (data['action']=='registration_complete'):
+                self.screen_manager.get_screen('ScreenRegister').data_received(data)
+                print("registration_complete")
+
+            if (data['action'] == 'show_screen'):
+                print(data)
+                self.screen_manager.current = data['screen_name']
+
+            if (data['action'] == 'start_timer'):
+                self.screen_manager.current_screen.ids['timer_time'].start_timer(int(data['seconds']))
+
+
     # ==== communicatoin to twisted server  KC: KivyClient KL: KivyLogger=====
     def try_connection(self):
         server_ip = self.basic_server_ip + str(self.server_ip_end)

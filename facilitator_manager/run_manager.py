@@ -2,6 +2,7 @@
 import json
 import rospy
 from std_msgs.msg import String
+import time
 
 
 class ManagerNode():
@@ -10,7 +11,11 @@ class ManagerNode():
                                     #,tablet_id_2:{"subject_id":subject_id, "tablet_ip";tablet_ip}
 
     tablets_ips = {}
+    tablet_ids = {}
     tablets_subjects_ids = {}
+
+    tablet_audience_data = {}
+    tablet_audience_agree = {}
 
 
     def __init__(self):
@@ -19,7 +24,8 @@ class ManagerNode():
         rospy.init_node('manager_node') #init a listener:
         rospy.Subscriber('nao_state', String, self.callback_nao_state)
         rospy.Subscriber('tablet_to_manager', String, self.callback_to_manager)
-        #rospy.spin() #spin() simply keeps python from exiting until this node is stopped
+        rospy.Subscriber('log', String, self.callback_log)
+        rospy.spin() #spin() simply keeps python from exiting until this node is stopped
 
         self.waiting = False
 
@@ -29,7 +35,7 @@ class ManagerNode():
             logics_json = json.load(data_file)
             #self.poses_conditions = logics_json['conditions']
             self.study_sequence = logics_json['sequence']
-            for action in self.study_sequence[:3]:
+            for action in self.study_sequence[:7]:
                 print ("action",action["action"])
                 if (action["action"] == "run_behavior" or action["action"]=="rest"):
                     print("if", action)
@@ -38,13 +44,72 @@ class ManagerNode():
                     self.waiting = True
                     while self.waiting:
                         pass
-                # if (action['action'] == 'show_screen'):
-                #     if "tablets" in action:
-                #         for tablet in action['tablets']:
+                if (action['action'] == 'show_screen'):
+                    if "tablets" in action:
+                        for tablet_id in action['tablets']:
+                            try:
+                                client_ip = self.tablets_ips[str(tablet_id)]
+                                message = {'action': 'show_screen', 'client_ip': client_ip, 'screen_name': action['screen_name']}
+                                self.tablet_publisher.publish(json.dumps(message))
+                            except:
+                                print('not enough tablets')
+
+                if action['action'] == 'sleep':
+                    # send to all tablets, start_timer
+                    for tablet_ip in self.tablets_ips:
+                        message = {'action': 'start_timer', 'client_ip': client_ip, 'seconds': action['seconds']}
+                        self.tablet_publisher.publish(json.dumps(message))
+                    nao_message = {'action': 'sound_tracker'}
+                    self.robot_publisher.publish(json.dumps(nao_message))
+
+                    time.sleep(float(action['seconds']))
+
+                if action['action'] == 'sound_tracker':
+                    self.robot_publisher.publish(json.dumps(action))
+
+                # TODO check this
+                if action['action'] == "run_behavior_special":
+                    if action['parameters'][0] == 'r10':
+                        # find min, look at
+                        min_text = (0, 100000)
+                        for tablet_id, size_text in self.tablet_audience_data.items():
+                            if size_text < min_text[1]:
+                                min_text = (tablet_id, size_text)
+                        nao_message = {'action': 'run_behavior',
+                                       'parameters': ['robot_facilitator-ad2c5c/head_tablet_' + str(min_text[0])]}
+                        self.robot_publisher.publish(json.dumps(nao_message))
+                        nao_message = {'action': 'run_behavior', 'parameters': ['robot_facilitator-ad2c5c/r10']}
+                        self.robot_publisher.publish(json.dumps(nao_message))
+
+                if action['parameters'][0] == 'r12':
+                    # find min, look at
+                    max_text = (0, 0)
+                    for tablet_id, size_text in self.tablet_audience_data.items():
+                        if size_text > max_text[1]:
+                            max_text = (tablet_id, size_text)
+                    nao_message = {'action': 'run_behavior',
+                                   'parameters': ['robot_facilitator-ad2c5c/head_tablet_' + str(max_text[0])]}
+                    self.robot_publisher.publish(json.dumps(nao_message))
+                    nao_message = {'action': 'run_behavior', 'parameters': ['robot_facilitator-ad2c5c/r12']}
+                    self.robot_publisher.publish(json.dumps(nao_message))
+
+                if action['parameters'][0] == 'r17':
+                    for tablet_id, agree in self.tablet_audience_agree.items():
+                        if not agree:
+                            nao_message = {'action': 'run_behavior',
+                                           'parameters': ['robot_facilitator-ad2c5c/head_tablet_' + str(tablet_id)]}
+                            self.robot_publisher.publish(json.dumps(nao_message))
+                            nao_message = {'action': 'run_behavior', 'parameters': ['robot_facilitator-ad2c5c/r17']}
+                            self.robot_publisher.publish(json.dumps(nao_message))
+                            break
 
 
 
-        # nao_message = {'action': 'say_text_to_speech', 'parameters': ['hello']}
+
+
+
+
+                # nao_message = {'action': 'say_text_to_speech', 'parameters': ['hello']}
         # self.robot_publisher.publish(json.dumps(nao_message))
 
 
@@ -71,16 +136,19 @@ class ManagerNode():
         self.tablets[tablet_id] = {'subject_id':subject_id, 'tablet_ip':client_ip}
         self.tablets_subjects_ids[tablet_id] = subject_id
         self.tablets_ips[tablet_id] = client_ip
+        self.tablets_ips[client_ip] = tablet_id
 
         nao_message = {'action': 'say_text_to_speech', 'client_ip':client_ip,'parameters': ['register tablet', 'tablet_id',str(tablet_id), 'subject id',str(subject_id)]}
         self.robot_publisher.publish(json.dumps(nao_message))
-        if (len(self.tablets)>1):
+        if (len(self.tablets)>0):
             print("two tablets are registered")
 
             for key,value in self.tablets_ips.viewitems():
                 client_ip = value
                 message = {'action':'registration_complete','client_ip':client_ip}
                 self.tablet_publisher.publish(json.dumps(message))
+
+            self.run_study()
 
     def scene1(self):
         print("start")
@@ -116,9 +184,30 @@ class ManagerNode():
     #def publish_angeles(self):
     #    rospy.init_node('nao_angeles')
 
+    def callback_log(self, data):
+        print('----- log -----', data)
+        log = json.loads(data.data)
+        print(log)
+
+        if 'audience_list' in log['obj']:
+            if 'text' in log['action']:
+                if log['client_ip'] not in self.tablet_audience_data:
+                    self.tablet_audience_data[log['client_ip']] = 0
+                self.tablet_audience_data[self.tablets_ips[log['client_ip']]] += 1
+                print(self.tablet_audience_data)
+
+        if 'agree_audience_list' in log['obj']:
+            if log['client_ip'] not in self.tablet_audience_agree:
+                self.tablet_audience_agree[log['client_ip']] = False
+            if log['obj'] == 'agree_audience_list':
+                self.tablet_audience_agree[self.tablets_ips[log['client_ip']]] = True
+            else:
+                self.tablet_audience_agree[self.tablets_ips[log['client_ip']]] = False
+
+
 if __name__ == '__main__':
     try:
         manager = ManagerNode()
-        manager.run_study()
+        # manager.run_study()
     except rospy.ROSInterruptException:
         pass
