@@ -17,14 +17,32 @@ from kivy.uix.label import Label
 
 
 class TimerLabel(Label):
-
+    time = -1
     def start_timer(self, duration=5):
+        self.stop_timer()
+        print("start_timer?")
+        if (self.time>-1): # in case the timer was already on, unschedule it
+            Clock.unschedule(self.event)
+
         self.time = duration
         self.event = Clock.schedule_interval(self.advance, 1)
-        self.text = str(self.time)
+        min,sec = divmod(duration, 60)
+        str_time = "%d:%02d" % (min, sec)
+        self.text = str_time
+
+    def stop_timer(self):
+        try:
+            Clock.unschedule(self.event)
+            self.time = -1
+            self.text = ""
+        except:
+            print ("stop timer failed")
 
     def advance(self, dt):
-        self.text = str(self.time)
+        min, sec = divmod(self.time, 60)
+        str_time = "%d:%02d" % (min, sec)
+        print("self.time", self.time, str_time)
+        self.text = str_time
         if self.time <= 0:
             Clock.unschedule(self.event)
             self.text = 'רמגנ'
@@ -70,7 +88,7 @@ class ScreenAudience(Screen):
     def __init__(self, the_app):
         self.the_app = the_app
         super(Screen, self).__init__()
-        audience_text = "ישיא דעי להק"
+        audience_text = "(תישיא הדובע) דעי להק"
         #audience_text = str(audience_text[::-1])
       #  print(audience_text, audience_text[::-1])
         self.ids["audience_title"].text = audience_text #HebrewManagement.multiline(, num_char=30, start_to_end=True)
@@ -88,7 +106,7 @@ class ScreenAudience(Screen):
         self.ids["audience_list_5"].bind(text=self.ids["audience_list_5"].on_text_change)
 
         self.ids["audience_list_1"].focus=True
-        self.ids['timer_time'].start_timer()
+        # self.ids['timer_time'].start_timer()
 
 
 
@@ -99,10 +117,8 @@ class ScreenAudienceGroup(Screen):
     def __init__(self, the_app):
         self.the_app = the_app
         super(Screen, self).__init__()
-        audience_group_title = "םכלוכ לע תמכסומ תחא העד ושבג"
-        #audience_text = str(audience_text[::-1])
-      #  print(audience_text, audience_text[::-1])
-        self.ids["audience_group_title"].text = audience_group_title #HebrewManagement.multiline(, num_char=30, start_to_end=True)
+
+        self.ids["audience_group_title"].text = "(תיתצובק הדובע) דעי להק" #HebrewManagement.multiline(, num_char=30, start_to_end=True)
         self.ids["audience_list_group_1"].bind(text=HebrewManagement.text_change)
         self.ids["audience_list_group_2"].bind(text=HebrewManagement.text_change)
         self.ids["audience_list_group_3"].bind(text=HebrewManagement.text_change)
@@ -117,6 +133,30 @@ class ScreenAudienceGroup(Screen):
 
         self.ids["audience_list_group_1"].focus=True
 
+
+class ScreenAudienceAgreeLeader(Screen):
+    the_app = None
+
+    def __init__(self, the_app):
+        self.the_app = the_app
+        super(Screen, self).__init__()
+        audience_text = "?תאזה המישרה םע ה/םיכסמ ה/תא םאה"
+        self.ids["audience_title"].text = audience_text
+        #self.ids["audience_list_group_1"].bind(text=self.the_app.screen_manager.get_screen('ScreenAudienceGroup').ids['audience_list_group_1'].text)
+        #self.ids["audience_list_group_1"].bind(text=self.screen_manager.get_screen('ScreenRegister').ids['subject_id'].text
+
+        self.ids["audience_list_group_1"].bind(text=HebrewManagement.text_change)
+        self.ids["audience_list_group_2"].bind(text=HebrewManagement.text_change)
+        self.ids["audience_list_group_3"].bind(text=HebrewManagement.text_change)
+        self.ids["audience_list_group_4"].bind(text=HebrewManagement.text_change)
+        self.ids["audience_list_group_5"].bind(text=HebrewManagement.text_change)
+
+    def on_enter(self, *args):
+        self.ids["audience_list_group_1"].text = self.the_app.screen_manager.get_screen('ScreenAudienceGroup').ids['audience_list_group_1'].text
+        self.ids["audience_list_group_2"].text = self.the_app.screen_manager.get_screen('ScreenAudienceGroup').ids['audience_list_group_2'].text
+        self.ids["audience_list_group_3"].text = self.the_app.screen_manager.get_screen('ScreenAudienceGroup').ids['audience_list_group_3'].text
+        self.ids["audience_list_group_4"].text = self.the_app.screen_manager.get_screen('ScreenAudienceGroup').ids['audience_list_group_4'].text
+        self.ids["audience_list_group_5"].text = self.the_app.screen_manager.get_screen('ScreenAudienceGroup').ids['audience_list_group_5'].text
 
 class ScreenAudienceAgree(Screen):
     the_app = None
@@ -134,7 +174,7 @@ class ScreenAudienceQuestions(Screen):
     def __init__(self, the_app):
         self.the_app = the_app
         super(Screen, self).__init__()
-        audience_text = "םישמתשמ רקחמל תולאש שולש"
+        audience_text = "(תישיא הדובע) םישמתשמ רקחמ"
         #audience_text = str(audience_text[::-1])
       #  print(audience_text, audience_text[::-1])
         self.ids["audience_questions_title"].text = audience_text #HebrewManagement.multiline(, num_char=30, start_to_end=True)
@@ -155,7 +195,7 @@ class ScreenAudienceQuestionsGroup(Screen):
     def __init__(self, the_app):
         self.the_app = the_app
         super(Screen, self).__init__()
-        audience_group_title = "יתצובק - םישמתשמ רקחמל תולאש שמח"
+        audience_group_title = "(תיתצובק הדובע) םישמתשמ רקחמ"
         #audience_text = str(audience_text[::-1])
       #  print(audience_text, audience_text[::-1])
         self.ids["audience_questions_group_title"].text = audience_group_title #HebrewManagement.multiline(, num_char=30, start_to_end=True)
@@ -178,14 +218,29 @@ class ScreenAudienceQuestionsGroup(Screen):
 
 class ScreenStartSimulation(Screen):
     the_app = None
+    roles = {
+        'proctor': 'ןייסנ',
+        'subject': 'קדבנ'
+    }
+    bias = {
+        'proctor': ('תומידקה תייטה','רושיאה תייטה','תרוקיב לבקל ישוקה לש הייטה'),
+        'subject': ('הרק תמאב המ חוכשל הייטה','הייצרה תייטה')
+    }
+
 
     def __init__(self, the_app):
         self.the_app = the_app
         super(Screen, self).__init__()
-        title = "תויהל תרחבנ"
-        self.ids['start_simulation_role'].text = title
-        title = "ךלש הייטהה"
-        self.ids['start_simulation_bias'].text = title
+        self.role_title = "תויהל תרחבנ"
+        self.ids['start_simulation_role'].text = self.role_title
+        self.bias_title = "ךלש הייטהה"
+        self.ids['start_simulation_bias'].text = self.bias_title
+
+    def update_role_bias(self, role, bias):
+        self.role_title += ' '  + self.roles[role]
+        self.ids['start_simulation_role'].text = self.role_title
+        self.bias_title += ' ' + self.bias[role][bias]
+        self.ids['start_simulation_bias'].text = self.bias_title
 
 
 class ScreenSimulation(Screen):
@@ -257,7 +312,7 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
     def build(self):
         self.the_app = self
         self.basic_server_ip = '192.168.0.10'
-        self.basic_server_ip = '127.0.0.1'
+        # self.basic_server_ip = '127.0.0.1'
         self.server_ip_end = 0
 
         #return ScatterTextWidget ()
@@ -273,6 +328,7 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
         screen_audience_questions = ScreenAudienceQuestions(self)
         screen_audience_questions_group = ScreenAudienceQuestionsGroup(self)
         screen_audience_agree = ScreenAudienceAgree(self)
+        screen_audience_agree_leader = ScreenAudienceAgreeLeader(self)
         screen_start_simulation = ScreenStartSimulation(self)
         screen_simulation = ScreenSimulation(self)
         screen_bye = ScreenBye(self)
@@ -284,6 +340,7 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
         self.screen_manager.add_widget(screen_audience)
         self.screen_manager.add_widget(screen_audience_group)
         self.screen_manager.add_widget(screen_audience_agree)
+        self.screen_manager.add_widget(screen_audience_agree_leader)
         self.screen_manager.add_widget(screen_audience_questions)
         self.screen_manager.add_widget(screen_audience_questions_group)
         self.screen_manager.add_widget(screen_start_simulation)
@@ -317,10 +374,39 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
         print("register_tablet", message_str)
         KC.client.send_message(message_str)
 
+    def audience_done(self):
+        print("audience_done")
+        self.screen_manager.current_screen.ids['timer_time'].stop_timer()
+        tablet_id = self.screen_manager.get_screen('ScreenRegister').ids['tablet_id'].text
+        subject_id = self.screen_manager.get_screen('ScreenRegister').ids['subject_id'].text
+        print("audience_done", tablet_id, subject_id)
+        message = {'tablet_to_manager': {'action': 'audience_done', 'parameters': {'subject_id':subject_id, 'tablet_id':tablet_id}}}
+        message_str = str(json.dumps(message))
+        print("audience_done", message_str)
+        KC.client.send_message(message_str)
+
+    def audience_group_done(self):
+        print("audience_done")
+        self.screen_manager.current_screen.ids['timer_time'].stop_timer()
+        tablet_id = self.screen_manager.get_screen('ScreenRegister').ids['tablet_id'].text
+        subject_id = self.screen_manager.get_screen('ScreenRegister').ids['subject_id'].text
+        print("audience_done", tablet_id, subject_id)
+        message = {'tablet_to_manager': {'action': 'audience_group_done', 'parameters': {'subject_id':subject_id, 'tablet_id':tablet_id}}}
+        message_str = str(json.dumps(message))
+        print("audience_done", message_str)
+        KC.client.send_message(message_str)
+
+    #'{"tablet_to_manager": {"action": "register_tablet", "parameters": {"tablet_id": "1", "subject_id": "0"}}}'
+    #'{"tablet_to_manager": {"action": "audience_done", "parameters": {"tablet_id": "1", "subject_id": "0"}}}'
     def agree_audience_list(self, agree):
+
         if agree:
+            self.screen_manager.current_screen.ids['agree_audience_list'].background_color = (0, 1, 0, 1)
+            self.screen_manager.current_screen.ids['dont_agree_audience_list'].background_color = (0, 0.5, 0.5, 1)
             print("agree")
         else:
+            self.screen_manager.current_screen.ids['dont_agree_audience_list'].background_color = (1, 0, 0, 1)
+            self.screen_manager.current_screen.ids['agree_audience_list'].background_color = (0, 0.5, 0.5, 1)
             print("disagree")
 
     def simulation_spinners_submit (self):
@@ -376,9 +462,14 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
                 print(data)
                 self.screen_manager.current = data['screen_name']
 
+                if 'role' in data:
+                    self.screen_manager.current_screen.update_role_bias(role=data['role'], bias=int(data['bias']))
+
             if (data['action'] == 'start_timer'):
                 self.screen_manager.current_screen.ids['timer_time'].start_timer(int(data['seconds']))
 
+            if data['action'] == 'set_widget_text':
+                self.screen_manager.current_screen.ids[data['widget_id']].text = data['text']
 
     # ==== communicatoin to twisted server  KC: KivyClient KL: KivyLogger=====
     def try_connection(self):
