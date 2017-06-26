@@ -7,7 +7,7 @@ from threading import Timer
 
 class ManagerNode():
 
-    number_of_tablets = 2
+    number_of_tablets = 3
     tablets = {}    #in the form of {tablet_id_1:{"subject_id":subject_id, "tablet_ip";tablet_ip}
                                     #,tablet_id_2:{"subject_id":subject_id, "tablet_ip";tablet_ip}
 
@@ -16,7 +16,7 @@ class ManagerNode():
     tablets_subjects_ids = {}
 
     tablet_audience_data = {}
-    tablet_audience_agree = {}
+    tablets_audience_agree = {}
     tablets_audience_done = {}  # by id
     count_audience_done = 0
 
@@ -40,6 +40,11 @@ class ManagerNode():
         self.waiting = False
         self.waiting_timer = False
         self.waiting_robot = False
+        i=1
+        while i <= self.number_of_tablets:
+            self.tablets_audience_agree[i]= None
+            i=+1
+
         rospy.spin() #spin() simply keeps python from exiting until this node is stopped
 
 
@@ -97,7 +102,7 @@ class ManagerNode():
 
                 elif ("TU13" in action["parameters"][0]):
                     all_agree = True
-                    for item in self.tablet_audience_agree.items():
+                    for item in self.tablets_audience_agree.items():
                         all_agree = all_agree and item
 
                     if not all_agree:
@@ -118,18 +123,19 @@ class ManagerNode():
                     self.run_robot_behavior(nao_message)
 
             if action["action"] == "sleep":
-                print("the action is sleep", action["seconds"])
-                self.sleep_timer = Timer(float(action["seconds"]), self.timer_out)
-                print("self.sleep_timer.start()")
-                self.sleep_timer.start()
-                self.waiting = True
-                self.waiting_timer = True
-                while self.waiting_timer:
-                    pass
-                print('done waiting_timer', action)
-                #nao_message = {'action': 'sound_tracker'}
-                #self.robot_publisher.publish(json.dumps(nao_message))
-                #time.sleep(float(action['seconds']))
+                print("the action is sleep", action["seconds"], self.is_audience_done)
+                if (self.is_audience_done == False):
+                    self.sleep_timer = Timer(float(action["seconds"]), self.timer_out)
+                    print("self.sleep_timer.start()")
+                    self.sleep_timer.start()
+                    self.waiting = True
+                    self.waiting_timer = True
+                    while self.waiting_timer:
+                        pass
+                    print('done waiting_timer', action)
+                    #nao_message = {'action': 'sound_tracker'}
+                    #self.robot_publisher.publish(json.dumps(nao_message))
+                    #time.sleep(float(action['seconds']))
 
             if action['action'] == 'start_timer':
                 print("the action is start timer")
@@ -149,6 +155,7 @@ class ManagerNode():
                 self.robot_publisher.publish(json.dumps(action))
 
             if (action['action'] == 'show_screen'):
+                self.init_audience_done()
                 if "tablets" in action:
                     for tablet_id in action['tablets']:
                         try:
@@ -235,7 +242,7 @@ class ManagerNode():
                     self.attention_tablet[max_text[0]] = True
 
                 if action['parameters'][0] == 'r17':
-                    for tablet_id, agree in self.tablet_audience_agree.items():
+                    for tablet_id, agree in self.tablets_audience_agree.items():
                         if not agree:
                             nao_message = {'action': 'run_behavior',
                                            'parameters': ['robot_facilitator-ad2c5c/point_to_' + str(tablet_id)]}
@@ -345,10 +352,11 @@ class ManagerNode():
             self.robot_publisher.publish(data.data)
 
     def audience_done (self, tablet_id, subject_id, client_ip):
-        print("audience_done!!!")
-
-        self.tablets_audience_done[tablet_id] =  True
+        print("audience_done!!! tablet_id=", tablet_id)
         self.count_audience_done = 0
+        print ("values before", self.tablets_audience_done.values())
+        self.tablets_audience_done[tablet_id] =  True
+        print ("values after",self.tablets_audience_done.values())
         for value in self.tablets_audience_done.values():
             if value ==True:
                 self.count_audience_done += 1
@@ -356,11 +364,24 @@ class ManagerNode():
 
         if (self.count_audience_done == self.number_of_tablets):
             print("self.count_audience_done == self.number_of_tablets",self.count_audience_done,self.number_of_tablets)
-            self.sleep_timer.cancel()
-            print("self.sleep_timer.cancel()")
+            try:
+                self.sleep_timer.cancel()
+                print("self.sleep_timer.cancel()")
+            except:
+                print("failed self.sleep_timer_cancel")
             self.waiting_timer = False
             self.is_audience_done = True
+            #restart the values for future screens
+            self.count_audience_done = 0
+            #for key in self.tablets_audience_done.keys():
+            #    self.tablets_audience_done[key]=False
 
+    def init_audience_done(self):
+        self.is_audience_done = False
+        # restart the values for future screens
+        self.count_audience_done = 0
+        for key in self.tablets_audience_done.keys():
+            self.tablets_audience_done[key] = False
 
     def audience_group_done(self, tablet_id, subject_id, client_ip):
         print("audience_group_done!!!")
@@ -384,12 +405,10 @@ class ManagerNode():
         self.robot_publisher.publish(json.dumps(nao_message))
         if (len(self.tablets) == self.number_of_tablets):
             print("two tablets are registered")
-
             for key,value in self.tablets_ips.viewitems():
                 client_ip = value
                 message = {'action':'registration_complete','client_ip':client_ip}
                 self.tablet_publisher.publish(json.dumps(message))
-
             time.sleep(2)
             self.run_study()
 
@@ -432,12 +451,13 @@ class ManagerNode():
         log = json.loads(data.data)
         print(log)
 
-        if 'audience_done' in log['obj']:
+        if 'audience_done' in log['obj'] and log['action'] == 'press':
             client_ip = log['client_ip']
             tablet_id = self.tablets_ids[client_ip]
             subject_id = self.tablets_subjects_ids[tablet_id]
             self.audience_done(tablet_id,subject_id,client_ip)
-        if 'audience_group_done' in log['obj']:
+
+        if 'audience_group_done' in log['obj'] and log['action'] == 'press':
             client_ip = log['client_ip']
             tablet_id = self.tablets_ids[client_ip]
             subject_id = self.tablets_subjects_ids[tablet_id]
@@ -452,14 +472,28 @@ class ManagerNode():
 
         if 'agree_audience_list' in log['obj']:
             print("agree_audience_list")
-            if self.tablets_ids[log['client_ip']] not in self.tablet_audience_agree:
-                self.tablet_audience_agree[self.tablets_ids[log['client_ip']]] = False
-            if log['obj'] == 'agree_audience_list':
+            if self.tablets_ids[log['client_ip']] not in self.tablets_audience_agree.values():
+                self.tablets_audience_agree[self.tablets_ids[log['client_ip']]] = False
+            if log['obj'] == 'agree_audience_list' and log['action'] == 'press':
                 print("agree_audience_list True")
-                self.tablet_audience_agree[self.tablets_ids[log['client_ip']]] = True
-            else:
-                self.tablet_audience_agree[self.tablets_ids[log['client_ip']]] = False
+                self.tablets_audience_agree[self.tablets_ids[log['client_ip']]] = True
+            elif (log['action'] == 'press'):
                 print("agree_audience_list False")
+                self.tablets_audience_agree[self.tablets_ids[log['client_ip']]] = False
+
+            allVoted = True
+            i=1
+            while i <= self.number_of_tablets:
+                if (self.tablets_audience_agree[i] == None):
+                    allVoted = False
+                i =+ 1
+            if (allVoted == True):
+                self.waiting_timer = False
+                self.sleep_timer.cancel()
+                print("self.sleep_timer.cancel()")
+                self.waiting = False
+                self.waiting_timer = False
+
 
         if self.listen_to_text:
             self.text_audience_group[log['obj']] = log['comment']

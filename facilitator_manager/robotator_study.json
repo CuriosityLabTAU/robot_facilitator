@@ -1,5 +1,60 @@
 {
+
   "sequence": [
+    {"action":"wake_up"},
+    {"action":"show_screen", "screen_name":"ScreenHello", "tablets":[1,2,3,4,5]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/TU01", "wait"]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/TU02", "wait"]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/TU05", "wait"]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/TU06", "wait"]},
+    {"action":"show_screen", "screen_name":"ScreenAudience", "tablets":[1,2,3,4,5]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/TU07", "wait"]},
+    {"action": "start_timer","seconds": 120, "tablets":[1,2,3,4,5]},
+    {"action":"rest"},
+    {"action":"sleep", "seconds":"54"},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/one_min_left", "wait"]},
+    {"action":"sleep", "seconds":"60"},
+    {"action":"wake_up"},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/TU10", "wait"]},
+
+    {"action":"show_screen", "screen_name":"ScreenAudienceGroup", "tablets":[1]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/TU11", "wait"]},
+    {"action": "start_timer","seconds": 120, "tablets":[1,2,3,4,5]},
+    {"action":"rest"},
+    {"action":"sleep", "seconds":"120"},
+    {"action":"wake_up"},
+    {"action":"show_screen", "screen_name":"ScreenAudienceAgreeLeader", "tablets":[1]},
+    {"action":"show_screen", "screen_name":"ScreenAudienceAgree", "tablets":[2,3,4,5]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/TU12", "wait"]},
+    {"action": "start_timer","seconds": 45, "tablets":[1,2,3,4,5]},
+    {"action":"sleep", "seconds":"45"},
+
+    {"action":"show_screen", "screen_name":"ScreenAudienceQuestions", "tablets":[1,2,3,4,5]},
+
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/TU13", "wait"]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/TUR01", "wait"]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/TUR02", "wait"]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/TUR03", "wait"]},
+    {"action": "start_timer","seconds": 120, "tablets":[1,2,3,4,5]},
+    {"action":"rest"},
+    {"action":"sleep", "seconds":"120"},
+    {"action":"wake_up"},
+
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/TUR04", "wait"]},
+    {"action":"show_screen", "screen_name":"ScreenAudienceQuestionsGroup", "tablets":[3]},
+    {"action": "start_timer","seconds": 120, "tablets":[1,2,3,4,5]},
+    {"action":"rest"},
+    {"action":"sleep", "seconds":"120"},
+    {"action":"wake_up"},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/TUR05a", "wait"]},
+    {"action":"show_screen", "screen_name":"ScreenFinish", "tablets":[1,2,3,4,5]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/F01", "wait"]},
+    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/F02", "wait"]},
+    {"action":"rest"},
+    {"action":"say_text_to_speech", "parameters": ["yay, all done"]}
+  ],
+
+  "sequence_full": [
     {"action":"wake_up"},
     {"action":"show_screen", "screen_name":"ScreenHello", "tablets":[1,2,3,4,5]},
     {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/TU01", "wait"]},
@@ -53,23 +108,6 @@
     {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/F01", "wait"]},
     {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/robotator_behaviors/F02", "wait"]},
     {"action":"rest"},
-    {"action":"say_text_to_speech", "parameters": ["yay, all done"]}
-  ],
-
-  "sequence_full": [
-    {"action":"wake_up"},
-    {"action":"show_screen", "screen_name":"ScreenHello", "tablets":[1,2,3,4,5]},
-    {"action":"show_screen", "screen_name":"ScreenHello", "tablets":[1,2,3,4,5]},
-    {"action":"show_screen", "screen_name":"ScreenAudience", "tablets":[1,2,3,4,5]},
-    {"action": "start_timer","seconds": 30, "tablets":[1,2,3,4,5]},
-    {"action":"sleep", "seconds":"30"},
-    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/point_to_1"]},
-    {"action":"run_behavior", "parameters":["robot_facilitator-ad2c5c/r14","wait"]},
-    {"action":"show_screen", "screen_name":"ScreenAudienceGroup", "tablets":[1]},
-    {"action": "start_timer","seconds": 30, "tablets":[1,2,3,4,5]},
-    {"action":"rest"},
-    {"action":"sleep", "seconds":"30"},
-    {"action":"wake_up"},
     {"action":"say_text_to_speech", "parameters": ["yay, all done"]}
   ]
 }

@@ -53,7 +53,6 @@ class TimerLabel(Label):
 class MyScreenManager (ScreenManager):
     the_app = None
 
-
 class ScreenRegister (Screen):
     the_app = None
 
@@ -81,6 +80,12 @@ class ScreenHello (Screen):
         self.the_app = the_app
         super(Screen, self).__init__()
 
+class ScreenFinish (Screen):
+    the_app = None
+
+    def __init__(self, the_app):
+        self.the_app = the_app
+        super(Screen, self).__init__()
 
 class ScreenAudience(Screen):
     the_app = None
@@ -307,6 +312,13 @@ class Screen2 (Screen):
         self.the_app = the_app
         super(Screen, self).__init__()
 
+class Screen100 (Screen):
+    the_app = None
+
+    def __init__(self, the_app):
+        self.the_app = the_app
+        super(Screen, self).__init__()
+
 
 class RobotatorApp(App):  #The name of the class will make it search for learning2.kv
     def build(self):
@@ -321,8 +333,10 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
         screen1 = Screen1(self)
         screen2 = Screen2(self)
 
+        screen100= Screen100(self)
         screen_register = ScreenRegister(self)
         screen_hello = ScreenHello(self)
+        screen_finish = ScreenFinish(self)
         screen_audience = ScreenAudience(self)
         screen_audience_group = ScreenAudienceGroup(self)
         screen_audience_questions = ScreenAudienceQuestions(self)
@@ -331,9 +345,10 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
         screen_audience_agree_leader = ScreenAudienceAgreeLeader(self)
         screen_start_simulation = ScreenStartSimulation(self)
         screen_simulation = ScreenSimulation(self)
+        screen_simulation = ScreenFinish(self)
         screen_bye = ScreenBye(self)
 
-        self.screen_manager.add_widget(screen1)
+        self.screen_manager.add_widget(screen100)
         self.screen_manager.add_widget(screen2)
         self.screen_manager.add_widget(screen_register)
         self.screen_manager.add_widget(screen_hello)
@@ -345,6 +360,7 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
         self.screen_manager.add_widget(screen_audience_questions_group)
         self.screen_manager.add_widget(screen_start_simulation)
         self.screen_manager.add_widget(screen_simulation)
+        self.screen_manager.add_widget(screen_finish)
         self.screen_manager.add_widget(screen_bye)
 
         self.screen_manager.current = 'ScreenRegister'
