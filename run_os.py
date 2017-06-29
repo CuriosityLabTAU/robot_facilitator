@@ -44,4 +44,5 @@ def start_working(subject_id):
     t1 = threading.Thread(target=worker4)
     t1.start()
 
-intro("day1_session3")
+
+intro("day2_session6")

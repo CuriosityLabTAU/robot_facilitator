@@ -415,22 +415,29 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
     #'{"tablet_to_manager": {"action": "register_tablet", "parameters": {"tablet_id": "1", "subject_id": "0"}}}'
     #'{"tablet_to_manager": {"action": "audience_done", "parameters": {"tablet_id": "1", "subject_id": "0"}}}'
     def agree_audience_list(self, agree):
-
+        print("audience_agree_list")
+        tablet_id = self.screen_manager.get_screen('ScreenRegister').ids['tablet_id'].text
+        subject_id = self.screen_manager.get_screen('ScreenRegister').ids['subject_id'].text
         if agree:
-            self.screen_manager.current_screen.ids['agree_audience_list'].background_color = (0, 1, 0, 1)
-            self.screen_manager.current_screen.ids['dont_agree_audience_list'].background_color = (0, 0.5, 0.5, 1)
+            self.screen_manager.current_screen.ids['agree_list'].background_color = (0, 1, 0, 1)
+            self.screen_manager.current_screen.ids['dont_agree_list'].background_color = (0, 0.5, 0.5, 1)
             print("agree")
+            message = {'tablet_to_manager': {'action': 'agree_list', 'parameters': {'subject_id': subject_id, 'tablet_id': tablet_id}}}
         else:
-            self.screen_manager.current_screen.ids['dont_agree_audience_list'].background_color = (1, 0, 0, 1)
-            self.screen_manager.current_screen.ids['agree_audience_list'].background_color = (0, 0.5, 0.5, 1)
+            self.screen_manager.current_screen.ids['dont_agree_list'].background_color = (1, 0, 0, 1)
+            self.screen_manager.current_screen.ids['agree_list'].background_color = (0, 0.5, 0.5, 1)
             print("disagree")
+            message = {'tablet_to_manager': {'action': 'dont_agree_list','parameters': {'subject_id': subject_id, 'tablet_id': tablet_id}}}
+        message_str = str(json.dumps(message))
+        print("agree_list", message_str)
+        KC.client.send_message(message_str)
 
     def simulation_spinners_submit (self):
-        self.proctor1 = self.screen_manager.get_screen('screen_simulation').ids['spinner1'].text
-        self.proctor2 = self.screen_manager.get_screen('screen_simulation').ids['spinner2'].text
-        self.subject1 = self.screen_manager.get_screen('screen_simulation').ids['spinner1'].text
-        self.subject2 = self.screen_manager.get_screen('screen_simulation').ids['spinner2'].text
-        self.subject3 = self.screen_manager.get_screen('screen_simulation').ids['spinner3'].text
+            self.proctor1 = self.screen_manager.get_screen('screen_simulation').ids['spinner1'].text
+            self.proctor2 = self.screen_manager.get_screen('screen_simulation').ids['spinner2'].text
+            self.subject1 = self.screen_manager.get_screen('screen_simulation').ids['spinner1'].text
+            self.subject2 = self.screen_manager.get_screen('screen_simulation').ids['spinner2'].text
+            self.subject3 = self.screen_manager.get_screen('screen_simulation').ids['spinner3'].text
 
     def robot_say(self, text):
         print ("robot say", text)
@@ -491,8 +498,7 @@ class RobotatorApp(App):  #The name of the class will make it search for learnin
     def try_connection(self):
         server_ip = self.basic_server_ip + str(self.server_ip_end)
         KC.start(the_parents=[self], the_ip=server_ip)  # 127.0.0.1
-        KL.start(mode=[DataMode.file, DataMode.communication, DataMode.ros], pathname=self.user_data_dir,
-             the_ip=server_ip)
+        KL.start(mode=[DataMode.file, DataMode.communication, DataMode.ros], pathname=self.user_data_dir, the_ip=server_ip)
 
     def failed_connection(self):
         self.server_ip_end += 1
