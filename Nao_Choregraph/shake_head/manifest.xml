@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<package uuid="shake_head-d2e746">
+ <names>
+  <name lang="en_US">shake_head</name>
+ </names>
+ <descriptionLanguages>
+  <language>en_US</language>
+ </descriptionLanguages>
+ <contents>
+  <behaviorContent path="shake_head">
+   <nature></nature>
+   <permissions/>
+  </behaviorContent>
+ </contents>
+</package>

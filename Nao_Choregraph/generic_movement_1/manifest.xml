@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<package version="0.0.1" uuid="generic_movement_1-f467e2">
+ <names>
+  <name lang="en_US">generic_movement_1</name>
+ </names>
+ <descriptionLanguages>
+  <language>en_US</language>
+ </descriptionLanguages>
+ <contents>
+  <behaviorContent path="generic_movement_1">
+   <nature></nature>
+   <permissions/>
+  </behaviorContent>
+ </contents>
+</package>

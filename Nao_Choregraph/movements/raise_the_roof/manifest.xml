@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<package uuid="raise_the_roof-904e6f">
+ <names>
+  <name lang="en_US">raise_the_roof</name>
+ </names>
+ <descriptionLanguages>
+  <language>en_US</language>
+ </descriptionLanguages>
+ <contents>
+  <behaviorContent path="raise_the_roof">
+   <nature></nature>
+   <permissions/>
+  </behaviorContent>
+ </contents>
+</package>

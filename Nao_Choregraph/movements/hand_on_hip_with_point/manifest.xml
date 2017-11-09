@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<package uuid="hand_on_hip_with_point-ef3da5">
+ <names>
+  <name lang="en_US">hand_on_hip_with_point</name>
+ </names>
+ <descriptionLanguages>
+  <language>en_US</language>
+ </descriptionLanguages>
+ <contents>
+  <behaviorContent path="hand_on_hip_with_point">
+   <nature></nature>
+   <permissions/>
+  </behaviorContent>
+ </contents>
+</package>

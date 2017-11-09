@@ -7,10 +7,10 @@ from threading import Timer
 
 class ManagerNode():
 
-    number_of_tablets = 5
+    number_of_tablets = 1
     tablets = {}    #in the form of {tablet_id_1:{"subject_id":subject_id, "tablet_ip";tablet_ip}
                                     #,tablet_id_2:{"subject_id":subject_id, "tablet_ip";tablet_ip}
-    #
+
     tablets_ips = {}
     tablets_ids = {}
     tablets_subjects_ids = {}
